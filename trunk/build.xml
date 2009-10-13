@@ -16,8 +16,7 @@
         <format property="date.current.year" pattern="yyyy"/>
     </tstamp>
 
-    <property name="build.parent.dir" value="build"/>
-    <property name="build.dir"        value="${build.parent.dir}/build-${date.now}"/>
+    <property name="build.dir"        value="build"/>
 
     <!-- an extension propertie file must be stored in               -->
     <!-- an 'ant' folder under the root of the extension             -->
@@ -68,7 +67,6 @@
 
     <!-- Shows available properties for this build file -->
     <target name="show-properties" description="Shows the properties for this build file">
-        <echo message="build.parent.dir : ${build.parent.dir}"/>
         <echo message="build.dir        : ${build.dir}"/>
 
         <!-- extension.name should be defined as a script argument -->
@@ -101,7 +99,7 @@
 
     <!-- Removes the entire build/ directory -->
     <target name="clean" description="Removes the entire build directory">
-        <delete dir="${build.parent.dir}"/>
+        <delete dir="${build.dir}"/>
     </target>
 
     <!-- Creates a tarball of the latest build -->
