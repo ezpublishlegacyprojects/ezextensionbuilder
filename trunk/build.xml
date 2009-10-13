@@ -29,9 +29,12 @@
 
     <!-- Shows available properties for this build file -->
     <target name="show-properties" description="Shows the properties for this build file">
-        <echo message="basedir          : ${basedir}"/>
         <echo message="build.parent.dir : ${build.parent.dir}"/>
         <echo message="build            : ${build}"/>
+
+        <!-- extension.name should be defined as a script argument -->
+        <!-- ant -Dextension.name=<extensionname>                  -->
+        <echo message="extension name   : ${extension.name}"/>
     </target>
 
     <!-- Prepares the build directory    -->
