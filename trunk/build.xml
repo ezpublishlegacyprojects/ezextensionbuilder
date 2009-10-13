@@ -110,10 +110,12 @@
 
     <!-- Creates a tarball of the latest build -->
     <target name="dist" description="Creates a tarball of the built extension">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Removes the generated tarball -->
     <target name="dist-clean" description="Removes the generated tarball">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Updates ezinfo.php -->
@@ -202,10 +204,12 @@
     <!-- This requires PHPCodeSniffer for more informations       -->
     <!-- please go to http://pear.php.net/package/PHP_CodeSniffer -->
     <target name="coding-standards-check" description="Checks PHP code coding standard, requires PHPCodeSniffer">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Generates a md5sum file with md5 sums of all source file -->
     <target name="generate-md5sums" description="Generates an MD5 file with all md5 sums of source code files">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Checks if a schema.sql file is present for -->
@@ -286,6 +290,7 @@
     <!-- Runs the eZ Network certification utility -->
     <!-- This requires the ez_network extension    -->
     <target name="eznetwork-certify" description="Runs the certification script, requires the latest eZNetwork extension">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Checks for the presence of LICENSE and README files -->
@@ -305,5 +310,4 @@
         <fail unless="gnu.readme.exists" message="README file doesn't exist!"/>
 
     </target>
-
 </project>
