@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="eZExtensionBuilder" default="help">
+
+    <description>eZExtensionBuilder build file</description>
+
+    <!-- Shows the help message   -->
+    <!-- This is default target   -->
+    <!-- nothing will be built    -->
+    <!-- unless clearly specified -->
+    <target name="help" description="Shows this help">
+        <echo message="Please run : ant -p to learn more about available targets"/>
+    </target>
+
+    <!-- Prepares the build directory    -->
+    <!-- Creates the build/ directory if -->
+    <!-- does not already exists         -->
+    <target name="init" description="Prepares the extension to be built">
+    </target>
+
+    <!-- Builds the extension -->
+    <target name="build" depends="init" description="Builds the extension">
+    </target>
+
+    <!-- Removes the entire build/ directory -->
+    <target name="clean" description="Removes the entire build directory">
+    </target>
+
+    <!-- Creates a tarball of the latest build -->
+    <target name="dist" description="Creates a tarball of the built extension">
+    </target>
+
+    <!-- Removes the generated tarball -->
+    <target name="dist-clean" description="Removes the generated tarball">
+    </target>
+
+    <!-- Updates ezinfo.php -->
+    <target name="update-ezinfo" description="Updates ezinfo.php with correct version numbers">
+    </target>
+
+    <!-- Updated the SOFTWARE LICENSE    -->
+    <!-- header in each source code file -->
+    <target name="licence-headers-update" description="Update license headers in source code files">
+    </target>
+
+    <!-- Updated version numbers in all source code files -->
+    <target name="update-version-numbers" description="Update version numbers in source code files">
+    </target>
+
+    <!-- Generates the documentation out of .rst files -->
+    <!-- This requires the rst2html.py tool available  -->
+    <!-- at : http://docutils.sourceforge.net/         -->
+    <target name="generate-documentation" description="Generates the document of the extension, if created in RST">
+    </target>
+
+    <!-- Launch the ezp unit test suite                          -->
+    <!-- For more information on how to write                    -->
+    <!-- unit tests for an extension please go to                -->
+    <!-- http://ezpedia.org/en/ez/testing_ez_publish_test_system -->
+    <target name="tests" description="Launch unit tests if any">
+    </target>
+
+    <!-- Checks for coding standard for the current extension     -->
+    <!-- This requires PHPCodeSniffer for more informations       -->
+    <!-- please go to http://pear.php.net/package/PHP_CodeSniffer -->
+    <target name="coding-standards-check" description="Checks PHP code coding standard, requires PHPCodeSniffer">
+    </target>
+
+    <!-- Generates a md5sum file with md5 sums of all source file -->
+    <target name="generate-md5sums" description="Generates an MD5 file with all md5 sums of source code files">
+    </target>
+
+    <!-- Checks if a schema.sql file is present for -->
+    <!-- any supported database                    -->
+    <target name="check-schema-sql" description="Checks if a schema.sql is available for supported databases">
+    </target>
+
+    <!-- Checks if a .dba files exists for this extension -->
+    <target name="check-dba-file" description="Checks if a .dba file is available for this extension">
+    </target>
+
+    <!-- Runs the eZ Network certification utility -->
+    <!-- This requires the ez_network extension    -->
+    <target name="eznetwork-certify" description="Runs the certification script, requires the latest eZNetwork extension">
+    </target>
+
+    <!-- Checks for the presence of LICENSE and README files -->
+    <target name="gnu-files-check" description="Checks for LICENSE and README files">
+    </target>
+</project>
