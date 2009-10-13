@@ -12,7 +12,8 @@
     <!-- ================== -->
 
     <tstamp>
-        <format property="date.now"  pattern="yyyy-mm-dd_hh:mm:ss"/>
+        <format property="date.now"          pattern="yyyy-mm-dd_hh:mm:ss"/>
+        <format property="date.current.year" pattern="yyyy"/>
     </tstamp>
 
     <property name="build.parent.dir" value="build"/>
@@ -41,6 +42,16 @@
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
     <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.trunk.url" />
+
+    <patternset id="php.sources">
+        <include name="**/*.php"/>
+    </patternset>
+
+    <patternset id="all.sources">
+        <include name="**/*.php"/>
+        <include name="**/*.css"/>
+        <include name="**/*.js"/>
+    </patternset>
 
     <!-- =================== -->
     <!-- /Build properties   -->
@@ -82,6 +93,10 @@
     <!-- Builds the extension -->
     <target name="build" depends="init" description="Builds the extension">
         <antcall target="update-ezinfo"/>
+        <antcall target="update-license-headers"/>
+
+        <delete dir="${build.dir}/${extension.name}/ant"/>
+        <delete file="${build.dir}/${extension.name}/build.xml"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
@@ -113,11 +128,26 @@
 
     <!-- Updated the SOFTWARE LICENSE    -->
     <!-- header in each source code file -->
-    <target name="licence-headers-update" description="Update license headers in source code files">
-    </target>
+    <target name="update-license-headers" description="Update license headers in source code files">
+        <echo message="Updating license headers"/>
 
-    <!-- Updated version numbers in all source code files -->
-    <target name="update-version-numbers" description="Update version numbers in source code files">
+        <!-- SOFTWARE RELEASE -->
+        <replaceregexp byline="true">
+            <regexp pattern="// SOFTWARE RELEASE: (.*)"/>
+            <substitution expression="// SOFTWARE RELEASE: ${version.alias}-${version.release}"/>
+            <fileset dir="${build.dir}">
+                <patternset refid="all.sources"/>
+            </fileset>
+        </replaceregexp>
+
+        <!-- COPYRIGHT NOTICE -->
+        <replaceregexp byline="true">
+            <regexp pattern="// COPYRIGHT NOTICE: Copyright \(C\) 1999-[\d]{4} eZ Systems AS"/>
+            <substitution expression="// COPYRIGHT NOTICE: Copyright (C) 1999-${date.current.year} eZ Systems AS"/>
+            <fileset dir="${build.dir}">
+                <patternset refid="all.sources"/>
+            </fileset>
+        </replaceregexp>
     </target>
 
     <!-- Generates the documentation out of .rst files -->
