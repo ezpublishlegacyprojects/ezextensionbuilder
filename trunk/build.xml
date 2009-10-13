@@ -3,12 +3,35 @@
 
     <description>eZExtensionBuilder build file</description>
 
+    <!-- ================== -->
+    <!-- Build properties   -->
+    <!-- ================== -->
+
+    <tstamp>
+        <format property="date.now"  pattern="yyyy-mm-dd_hh:mm:ss"/>
+    </tstamp>
+
+    <property name="build.parent.dir" value="build"/>
+    <property name="build"            value="${build.parent.dir}-${date.now}"/>
+
+    <!-- =================== -->
+    <!-- /Build properties   -->
+    <!-- =================== -->
+
     <!-- Shows the help message   -->
     <!-- This is default target   -->
     <!-- nothing will be built    -->
     <!-- unless clearly specified -->
     <target name="help" description="Shows this help">
         <echo message="Please run : ant -p to learn more about available targets"/>
+        <antcall target="show-properties"/>
+    </target>
+
+    <!-- Shows available properties for this build file -->
+    <target name="show-properties" description="Shows the properties for this build file">
+        <echo message="basedir          : ${basedir}"/>
+        <echo message="build.parent.dir : ${build.parent.dir}"/>
+        <echo message="build            : ${build}"/>
     </target>
 
     <!-- Prepares the build directory    -->
