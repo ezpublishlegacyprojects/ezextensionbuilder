@@ -3,6 +3,10 @@
 
     <description>eZExtensionBuilder build file</description>
 
+    <!-- Required by ant-contrib             -->
+    <!-- http://ant-contrib.sourceforge.net/ -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
     <!-- ================== -->
     <!-- Build properties   -->
     <!-- ================== -->
@@ -12,7 +16,27 @@
     </tstamp>
 
     <property name="build.parent.dir" value="build"/>
-    <property name="build"            value="${build.parent.dir}-${date.now}"/>
+    <property name="build.dir"        value="${build.parent.dir}/build-${date.now}"/>
+
+    <!-- an extension propertie file must be stored in               -->
+    <!-- an 'ant' folder under the root of the extension             -->
+    <!-- For example for extension ezoe this gives :                 -->
+    <!-- ezoe                                                        -->
+    <!--   +ant                                                      -->
+    <!--      +-ezoe.properties                                      -->
+    <!--                                                             -->
+    <!-- the property files must be composed of the                  -->
+    <!-- following variables                                         -->
+    <!--                                                             -->
+    <!-- <extensionname>.version.major     = xxx                     -->
+    <!-- <extensionname>.version.minor     = yyy                     -->
+    <!-- <extensionname>.version.release   = zzzz                    -->
+    <!-- <extensionname>.svn.trunk.url     = http://url.com/to/trunk -->
+    <!--                                                             -->
+    <property file="./ant/${extension.name}.properties"/>
+
+    <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
+    <propertycopy name="svn.url" from="${extension.name}.svn.trunk.url" />
 
     <!-- =================== -->
     <!-- /Build properties   -->
@@ -30,7 +54,7 @@
     <!-- Shows available properties for this build file -->
     <target name="show-properties" description="Shows the properties for this build file">
         <echo message="build.parent.dir : ${build.parent.dir}"/>
-        <echo message="build            : ${build}"/>
+        <echo message="build.dir        : ${build}"/>
 
         <!-- extension.name should be defined as a script argument -->
         <!-- ant -Dextension.name=<extensionname>                  -->
@@ -41,6 +65,14 @@
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
     <target name="init" description="Prepares the extension to be built">
+        <mkdir dir="${build.dir}"/>
+
+        <!-- svn export repository -->
+        <exec executable="svn" failonerror="true">
+            <arg value="export"/>
+            <arg value="${svn.url}"/>
+            <arg value="${build.dir}/${extension.name}"/>
+        </exec>
     </target>
 
     <!-- Builds the extension -->
