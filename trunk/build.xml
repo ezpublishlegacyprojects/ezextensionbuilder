@@ -289,7 +289,20 @@
     </target>
 
     <!-- Checks for the presence of LICENSE and README files -->
-    <target name="gnu-files-check" description="Checks for LICENSE and README files">
+    <target name="check-gnu-files" description="Checks for LICENSE and README files">
+        <echo message="Checing for LICENSE and README files"/>
+
+        <!-- LICENSE -->
+        <available file="LICENSE"
+                   filepath="${build.dir}/${extension.name}"
+                   property="gnu.license.exists"/>
+        <fail unless="gnu.license.exists" message="LICENSE file doesn't exist!"/>
+
+        <!-- README -->
+        <available file="README"
+                   filepath="${build.dir}/${extension.name}"
+                   property="gnu.readme.exists"/>
+        <fail unless="gnu.readme.exists" message="README file doesn't exist!"/>
 
     </target>
 
