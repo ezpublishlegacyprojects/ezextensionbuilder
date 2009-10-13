@@ -54,7 +54,7 @@
     <!-- Shows available properties for this build file -->
     <target name="show-properties" description="Shows the properties for this build file">
         <echo message="build.parent.dir : ${build.parent.dir}"/>
-        <echo message="build.dir        : ${build}"/>
+        <echo message="build.dir        : ${build.dir}"/>
 
         <!-- extension.name should be defined as a script argument -->
         <!-- ant -Dextension.name=<extensionname>                  -->
@@ -81,6 +81,7 @@
 
     <!-- Removes the entire build/ directory -->
     <target name="clean" description="Removes the entire build directory">
+        <delete dir="${build.parent.dir}"/>
     </target>
 
     <!-- Creates a tarball of the latest build -->
