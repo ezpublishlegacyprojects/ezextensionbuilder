@@ -52,6 +52,10 @@
         <include name="**/*.js"/>
     </patternset>
 
+    <patternset id="rst.sources">
+        <include name="**/*.rst"/>
+    </patternset>
+
     <!-- =================== -->
     <!-- /Build properties   -->
     <!-- =================== -->
@@ -92,6 +96,7 @@
     <target name="build" depends="init" description="Builds the extension">
         <antcall target="update-ezinfo"/>
         <antcall target="update-license-headers"/>
+        <antcall target="generate-documentation"/>
 
         <delete dir="${build.dir}/${extension.name}/ant"/>
         <delete file="${build.dir}/${extension.name}/build.xml"/>
@@ -152,6 +157,31 @@
     <!-- This requires the rst2html.py tool available  -->
     <!-- at : http://docutils.sourceforge.net/         -->
     <target name="generate-documentation" description="Generates the document of the extension, if created in RST">
+        <echo message="Building documentation"/>
+
+        <mapper id="rstout"
+                type="glob"
+                from="${build.dir}/${extension.name}/doc/*.rst"
+                to="${build.dir}/${extension.name}/doc/*.html"/>
+
+        <apply executable="rst2html.py" failonerror="true">
+            <fileset dir="${build.dir}/${extension.name}/doc">
+                <patternset refid="rst.sources"/>
+            </fileset>
+            <srcfile/>
+            <redirector>
+                <outputmapper refid="rstout"/>
+            </redirector>
+        </apply>
+
+        <!-- A few extension have Makefiles to generate documentation -->
+        <!-- We have to remove them as well as original .rst files    -->
+        <delete>
+            <fileset dir="${build.dir}/${extension.name}\doc/">
+                <patternset refid="rst.sources"/>
+                <include name="Makefile"/>
+            </fileset>
+        </delete>
     </target>
 
     <!-- Launch the ezp unit test suite                          -->
