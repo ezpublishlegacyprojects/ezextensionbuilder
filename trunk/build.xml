@@ -36,7 +36,11 @@
     <property file="./ant/${extension.name}.properties"/>
 
     <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
-    <propertycopy name="svn.url" from="${extension.name}.svn.trunk.url" />
+    <propertycopy name="version.major"   from="${extension.name}.version.major"/>
+    <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
+    <propertycopy name="version.release" from="${extension.name}.version.release"/>
+    <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
+    <propertycopy name="svn.url"         from="${extension.name}.svn.trunk.url" />
 
     <!-- =================== -->
     <!-- /Build properties   -->
@@ -77,6 +81,7 @@
 
     <!-- Builds the extension -->
     <target name="build" depends="init" description="Builds the extension">
+        <antcall target="update-ezinfo"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
@@ -94,6 +99,16 @@
 
     <!-- Updates ezinfo.php -->
     <target name="update-ezinfo" description="Updates ezinfo.php with correct version numbers">
+        <echo message="Updating ezinfo.php"/>
+
+        <replaceregexp byline="true">
+            <!-- 'Version' => 'xxxxxx', -->
+            <!-- The limit of spaces is set to 25 otherwise 3rd party version strings -->
+            <!-- will be replaced as well and we do not want that                     -->
+            <regexp pattern="^([\s]{1,25}\047Version\047[\s]+=>[\s]+\047)(.*)(\047,)$"/>
+            <substitution expression='\1${version.alias}-${version.release}\3'/>
+            <fileset dir="${build.dir}" includes="**/*ezinfo.php"/>
+        </replaceregexp>
     </target>
 
     <!-- Updated the SOFTWARE LICENSE    -->
@@ -145,4 +160,5 @@
     <!-- Checks for the presence of LICENSE and README files -->
     <target name="gnu-files-check" description="Checks for LICENSE and README files">
     </target>
+
 </project>
