@@ -267,6 +267,20 @@
 
     <!-- Checks if a .dba files exists for this extension -->
     <target name="check-dba-file" description="Checks if a .dba file is available for this extension">
+        <echo message="Checking for .dba files"/>
+
+        <!-- share/db_schema.dba -->
+        <available file="db_schema.dba"
+                   filepath="${build.dir}/${extension.name}/share/"
+                   property="db.schema.dba.exists"/>
+        <fail unless="db.schema.dba.exists" message="db_schema.dba file doesn't exist!"/>
+
+        <!-- share/db_schema.dba -->
+        <available file="db_data.dba"
+                   filepath="${build.dir}/${extension.name}/share/"
+                   property="db.data.dba.exists"/>
+        <fail unless="db.data.dba.exists" message="db_data.dba file doesn't exist!"/>
+
     </target>
 
     <!-- Runs the eZ Network certification utility -->
