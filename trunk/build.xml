@@ -209,8 +209,60 @@
     </target>
 
     <!-- Checks if a schema.sql file is present for -->
-    <!-- any supported database                    -->
-    <target name="check-schema-sql" description="Checks if a schema.sql is available for supported databases">
+    <!-- any supported database                     -->
+    <!--                                            -->
+    <!-- The accepted directory structure is :      -->
+    <!--                                            -->
+    <!-- myextension                                -->
+    <!-- `__ sql                                    -->
+    <!--     |__ mysql                              -->
+    <!--     |   |__ cleandata.sql                  -->
+    <!--     |   `__ schema.sql                     -->
+    <!--     |__ oracle                             -->
+    <!--     |   |__ cleandata.sql                  -->
+    <!--     |   `__ schema.sql                     -->
+    <!--     `__ postgresql                         -->
+    <!--         |__ cleandata.sql                  -->
+    <!--         `__ schema.sql                     -->
+    <!--                                            -->
+    <target name="check-schema-sql" description="Checks if a schema.sql / cleandata.sql is available for supported databases">
+        <echo message="Checking for schema.sql and cleandata.sql"/>
+
+        <!-- mysql/schema.sql -->
+        <available file="schema.sql"
+                   filepath="${build.dir}/${extension.name}/sql/mysql"
+                   property="mysql.schema.exists"/>
+        <fail unless="mysql.schema.exists" message="schema.sql file doesn't exist for mysql !"/>
+
+        <!-- mysql/cleandata.sql -->
+        <available file="cleandata.sql"
+                   filepath="${build.dir}/${extension.name}/sql/mysql"
+                   property="mysql.cleandata.exists"/>
+        <fail unless="mysql.cleandata.exists" message="cleandata.sql file doesn't exist for mysql!"/>
+
+        <!-- postgresql/schema.sql -->
+        <available file="schema.sql"
+                   filepath="${build.dir}/${extension.name}/sql/postgresql"
+                   property="postgresql.schema.exists"/>
+        <fail unless="postgresql.schema.exists" message="schema.sql file doesn't exist for postgresql !"/>
+
+        <!-- postgresql/cleandata.sql -->
+        <available file="cleandata.sql"
+                   filepath="${build.dir}/${extension.name}/sql/postgresql"
+                   property="postgresql.cleandata.exists"/>
+        <fail unless="postgresql.cleandata.exists" message="cleandata.sql file doesn't exist for postgresql!"/>
+
+        <!-- oracle/schema.sql -->
+        <available file="schema.sql"
+                   filepath="${build.dir}/${extension.name}/sql/oracle"
+                   property="oracle.schema.exists"/>
+        <fail unless="oracle.schema.exists" message="schema.sql file doesn't exist for oracle !"/>
+
+        <!-- oracle/cleandata.sql -->
+        <available file="cleandata.sql"
+                   filepath="${build.dir}/${extension.name}/sql/oracle"
+                   property="oracle.cleandata.exists"/>
+        <fail unless="oracle.cleandata.exists" message="cleandata.sql file doesn't exist for oracle!"/>
     </target>
 
     <!-- Checks if a .dba files exists for this extension -->
@@ -224,6 +276,7 @@
 
     <!-- Checks for the presence of LICENSE and README files -->
     <target name="gnu-files-check" description="Checks for LICENSE and README files">
+
     </target>
 
 </project>
