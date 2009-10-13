@@ -108,10 +108,12 @@
         <delete dir="${build.dir}"/>
     </target>
 
+    <!-- Removes build/ and dist/ -->
     <target name="clean-all" description="Removes the build/ and the dist/ directory">
         <antcall target="clean"/>
         <antcall target="dist-clean"/>
     </target>
+
     <!-- Creates a tarball of the latest build -->
     <target name="dist" description="Creates a tarball of the built extension">
         <mkdir dir="dist"/>
