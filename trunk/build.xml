@@ -108,14 +108,22 @@
         <delete dir="${build.dir}"/>
     </target>
 
+    <target name="clean-all" description="Removes the build/ and the dist/ directory">
+        <antcall target="clean"/>
+        <antcall target="dist-clean"/>
+    </target>
     <!-- Creates a tarball of the latest build -->
     <target name="dist" description="Creates a tarball of the built extension">
-        <echo message="Not Implemented Yet"/>
+        <mkdir dir="dist"/>
+        <tar destfile="dist/${extension.name}-${version.alias}.${version.release}.tar.gz"
+             compression="gzip"
+             longfile="gnu"
+             basedir="${build.dir}"/>
     </target>
 
     <!-- Removes the generated tarball -->
     <target name="dist-clean" description="Removes the generated tarball">
-        <echo message="Not Implemented Yet"/>
+        <delete dir="dist"/>
     </target>
 
     <!-- Updates ezinfo.php -->
