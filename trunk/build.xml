@@ -100,6 +100,7 @@
 
         <delete dir="${build.dir}/${extension.name}/ant"/>
         <delete file="${build.dir}/${extension.name}/build.xml"/>
+        <delete dir="${build.dir}/${extension.name}/tests"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
@@ -188,7 +189,13 @@
     <!-- For more information on how to write                    -->
     <!-- unit tests for an extension please go to                -->
     <!-- http://ezpedia.org/en/ez/testing_ez_publish_test_system -->
+    <!-- This is a standalone target, it is not possible to run  -->
+    <!-- the unit test site from within the build                -->
+    <!-- The developpment of this target is in stand by since we -->
+    <!-- have to discuss a few things about login credentials    -->
+    <!-- the database first                                      -->
     <target name="tests" description="Launch unit tests if any">
+        <echo message="Not Implemented Yet"/>
     </target>
 
     <!-- Checks for coding standard for the current extension     -->
