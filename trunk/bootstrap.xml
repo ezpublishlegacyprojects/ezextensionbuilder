@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<project name="eZExtensionBuilder-Bootstrap" default="bootstrap">
+
+    <description>eZExtensionBuilder bootstrap file</description>
+
+    <property name="build.xml.url" value="http://svn.projects.ez.no/ezextensionbuilder/trunk/build.xml"/>
+
+    <target name="bootstrap" description="Download the real build.xml and launches it">
+        <get src="${build.xml.url}" dest="build.xml"/>
+    </target>
+</project>
