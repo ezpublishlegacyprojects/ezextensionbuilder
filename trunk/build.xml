@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<project name="eZExtensionBuilder" default="help">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="eZExtensionBuilder" default="help">
 
     <description>eZExtensionBuilder build file</description>
 
-    <!-- Required by ant-contrib             -->
-    <!-- http://ant-contrib.sourceforge.net/ -->
-    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+    <!-- ========= -->
+    <!-- Ivy Stuff -->
+    <!-- ========= -->
+
+    <property name="ivy.install.version" value="2.1.0" />
+
+    <condition property="ivy.home" value="${env.IVY_HOME}">
+      <isset property="env.IVY_HOME" />
+    </condition>
+
+    <property name="ivy.home"         value="${user.home}/.ant" />
+    <property name="ivy.jar.dir"      value="${ivy.home}/lib" />
+    <property name="ivy.jar.file"     value="${ivy.jar.dir}/ivy.jar" />
+    <property name="ivy.download.url" value="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"/>
+
+    <!-- =================== -->
+    <!-- Ivy Stuff : nirvana -->
+    <!-- =================== -->
 
     <!-- ================== -->
     <!-- Build properties   -->
@@ -34,13 +49,6 @@
     <!-- <extensionname>.svn.trunk.url     = http://url.com/to/trunk -->
     <!--                                                             -->
     <property file="./ant/${extension.name}.properties"/>
-
-    <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
-    <propertycopy name="version.major"   from="${extension.name}.version.major"/>
-    <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
-    <propertycopy name="version.release" from="${extension.name}.version.release"/>
-    <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
-    <propertycopy name="svn.url"         from="${extension.name}.svn.trunk.url" />
 
     <patternset id="php.sources">
         <include name="**/*.php"/>
@@ -81,7 +89,27 @@
     <!-- Prepares the build directory    -->
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
-    <target name="init" description="Prepares the extension to be built">
+    <target name="init" depends="clean-all,resolve-dependencies" description="Prepares the extension to be built">
+
+        <!-- Required by ant-contrib             -->
+        <!-- http://ant-contrib.sourceforge.net/ -->
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+
+        <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
+        <propertycopy name="version.major"   from="${extension.name}.version.major"/>
+        <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
+        <propertycopy name="version.release" from="${extension.name}.version.release"/>
+        <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
+        <propertycopy name="svn.url"         from="${extension.name}.svn.trunk.url" />
+
+        <!--
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
+            <classpath>
+                <pathelement location="${user.home}/.ant/lib/ant-contrib-1.0b3-jar.jar"/>
+            </classpath>
+        </taskdef>
+        -->
+
         <mkdir dir="${build.dir}"/>
 
         <!-- svn export repository -->
@@ -348,4 +376,46 @@
                    property="gnu.readme.exists"/>
         <fail unless="gnu.readme.exists" message="README file doesn't exist!"/>
     </target>
+
+
+    <!-- ==================== -->
+    <!-- Ivy specific targets -->
+    <!-- ==================== -->
+
+    <!-- Downloads Ivy from web site so that it            -->
+    <!-- can be used even without any special installation -->
+    <target name="download-ivy" unless="offline" description="Downloads Ivy">
+        <mkdir dir="${ivy.jar.dir}"/>
+        <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+             dest="${ivy.jar.file}" usetimestamp="true"/>
+    </target>
+
+    <!-- try to load ivy here from ivy home, in case the user has not already dropped   -->
+    <!-- it into ant's lib dir (note that the latter copy will always take precedence). -->
+    <!-- We will not fail as long as local lib dir exists (it may be empty) and         -->
+    <!-- ivy is in at least one of ant's lib dir or the local lib dir.                  -->
+    <target name="init-ivy" depends="download-ivy" description="Install Ivy">
+        <path id="ivy.lib.path">
+            <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+        </path>
+
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                 uri="antlib:org.apache.ivy.ant"
+                 classpathref="ivy.lib.path"/>
+    </target>
+
+    <!-- Retrieves dependencies with Ivy -->
+    <target name="resolve-dependencies" depends="init-ivy" unless="offline" description="Retrieves dependencies with ivy">
+        <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ivy.xml"
+             dest="ivy.xml"
+             usetimestamp="true"/>
+
+        <ivy:resolve file="ivy.xml"/>
+        <ivy:retrieve pattern="${user.home}/.ant/lib/[artifact]-[revision]-[type].[ext]"/>
+    </target>
+
+    <!-- ===================== -->
+    <!-- /Ivy specific targets -->
+    <!-- ===================== -->
+
 </project>
