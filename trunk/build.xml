@@ -94,13 +94,18 @@
 
     <!-- Builds the extension -->
     <target name="build" depends="init" description="Builds the extension">
-        <antcall target="update-ezinfo"/>
-        <antcall target="update-license-headers"/>
-        <antcall target="generate-documentation"/>
-
         <delete dir="${build.dir}/${extension.name}/ant"/>
         <delete file="${build.dir}/${extension.name}/build.xml"/>
         <delete dir="${build.dir}/${extension.name}/tests"/>
+
+        <antcall target="update-ezinfo"/>
+        <antcall target="update-license-headers"/>
+        <antcall target="generate-documentation"/>
+        <antcall target="generate-md5sums"/>
+        <antcall target="check-schema-sql"/>
+        <antcall target="check-dba-file"/>
+        <antcall target="check-gnu-files"/>
+        <antcall target="eznetwork-certify"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
