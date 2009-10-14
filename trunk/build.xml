@@ -16,7 +16,7 @@
         <format property="date.current.year" pattern="yyyy"/>
     </tstamp>
 
-    <property name="build.dir"        value="build"/>
+    <property name="build.dir" value="build"/>
 
     <!-- an extension propertie file must be stored in               -->
     <!-- an 'ant' folder under the root of the extension             -->
@@ -219,7 +219,26 @@
 
     <!-- Generates a md5sum file with md5 sums of all source file -->
     <target name="generate-md5sums" description="Generates an MD5 file with all md5 sums of source code files">
-        <echo message="Not Implemented Yet"/>
+        <echo message="Creating MD5 sums"/>
+
+        <mkdir dir="${build.dir}/${extension.name}/share"/>
+
+        <!-- Creates the checksum list -->
+        <apply executable="md5sum" failonerror="true" dir="${build.dir}/${extension.name}">
+            <fileset dir="${build.dir}/${extension.name}">
+                <patternset id="all.sources"/>
+            </fileset>
+            <srcfile/>
+            <redirector output="${build.dir}/${extension.name}/share/filelist.md5" append="true"/>
+        </apply>
+
+        <!-- removes the absolute part of the path -->
+        <!-- and only let the relative one         -->
+        <replaceregexp byline="true">
+            <regexp pattern="${user.dir}/${build.dir}/${extension.name}/"/>
+            <substitution expression=""/>
+            <fileset file="${build.dir}/${extension.name}/share/filelist.md5"/>
+        </replaceregexp>
     </target>
 
     <!-- Checks if a schema.sql file is present for -->
