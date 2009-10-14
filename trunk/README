@@ -38,10 +38,10 @@ And the ezoe.properties
 
 ::
 
-    ezoe.version.major     = 1
-    ezoe.version.minor     = 0
+    ezoe.version.major     = 5
+    ezoe.version.minor     = 1
     ezoe.version.release   = 0Alpha1
-    ezoe.svn.trunk.url     = http://url/to/ezoe/svn/repos/trunk
+    ezoe.svn.trunk.url     = http://svn.projects.ez.no/ezoe/trunk/ezoe/
 
 
 2. Downloading the bootstrap file
