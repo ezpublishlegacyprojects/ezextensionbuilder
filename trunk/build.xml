@@ -276,37 +276,37 @@
         <available file="schema.sql"
                    filepath="${build.dir}/${extension.name}/sql/mysql"
                    property="mysql.schema.exists"/>
-        <fail unless="mysql.schema.exists" message="schema.sql file doesn't exist for mysql !"/>
+        <fail unless="mysql.schema.exists" message="sql/mysql/schema.sql file doesn't exist !"/>
 
         <!-- mysql/cleandata.sql -->
         <available file="cleandata.sql"
                    filepath="${build.dir}/${extension.name}/sql/mysql"
                    property="mysql.cleandata.exists"/>
-        <fail unless="mysql.cleandata.exists" message="cleandata.sql file doesn't exist for mysql!"/>
+        <fail unless="mysql.cleandata.exists" message="sql/mysql/cleandata.sql file doesn't exist !"/>
 
         <!-- postgresql/schema.sql -->
         <available file="schema.sql"
                    filepath="${build.dir}/${extension.name}/sql/postgresql"
                    property="postgresql.schema.exists"/>
-        <fail unless="postgresql.schema.exists" message="schema.sql file doesn't exist for postgresql !"/>
+        <fail unless="postgresql.schema.exists" message="sql/postgresql/schema.sql file doesn't exist !"/>
 
         <!-- postgresql/cleandata.sql -->
         <available file="cleandata.sql"
                    filepath="${build.dir}/${extension.name}/sql/postgresql"
                    property="postgresql.cleandata.exists"/>
-        <fail unless="postgresql.cleandata.exists" message="cleandata.sql file doesn't exist for postgresql!"/>
+        <fail unless="postgresql.cleandata.exists" message="sql/postgresql/cleandata.sql file doesn't exist !"/>
 
         <!-- oracle/schema.sql -->
         <available file="schema.sql"
                    filepath="${build.dir}/${extension.name}/sql/oracle"
                    property="oracle.schema.exists"/>
-        <fail unless="oracle.schema.exists" message="schema.sql file doesn't exist for oracle !"/>
+        <fail unless="oracle.schema.exists" message="sql/oracle/schema.sql file doesn't exist !"/>
 
         <!-- oracle/cleandata.sql -->
         <available file="cleandata.sql"
                    filepath="${build.dir}/${extension.name}/sql/oracle"
                    property="oracle.cleandata.exists"/>
-        <fail unless="oracle.cleandata.exists" message="cleandata.sql file doesn't exist for oracle!"/>
+        <fail unless="oracle.cleandata.exists" message="sql/oracle/cleandata.sql file doesn't exist !"/>
     </target>
 
     <!-- Checks if a .dba files exists for this extension -->
