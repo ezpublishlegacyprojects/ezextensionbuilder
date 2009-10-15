@@ -257,23 +257,46 @@
     <target name="generate-md5sums" description="Generates an MD5 file with all md5 sums of source code files">
         <echo message="Creating MD5 sums"/>
 
-        <mkdir dir="${build.dir}/${extension.name}/share"/>
+        <!-- If the extension is delivered as an ezpackage -->
+        <!-- then the filelist.md5 should be stored in the -->
+        <!-- correct subdirectory                          -->
+        <available file="${extension.name}"
+                   filepath="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/"
+                   property="package.exists"/>
+
+        <if>
+            <equals arg1="${package.exists}" arg2="true"/>
+            <then>
+                <property name="fileset.dir"       value="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
+                <property name="filelist.md5.path" value="${fileset.dir}" />
+                <property name="trim.regex"        value="${user.dir}/${filelist.md5.path}/"/>
+            </then>
+            <else>
+                <property name="fileset.dir"       value="${build.dir}/${extension.name}"/>
+                <property name="filelist.md5.path" value="${fileset.dir}"/>
+                <property name="trim.regex"        value="${user.dir}/${fileset.dir}/"/>
+            </else>
+        </if>
+
+        <echo  message="${filelist.md5.path}/share/filelist.md5" />
+
+        <mkdir dir="${filelist.md5.path}/share"/>
 
         <!-- Creates the checksum list -->
         <apply executable="md5sum" failonerror="true" dir="${build.dir}/${extension.name}">
-            <fileset dir="${build.dir}/${extension.name}">
+            <fileset dir="${fileset.dir}">
                 <patternset id="all.sources"/>
             </fileset>
             <srcfile/>
-            <redirector output="${build.dir}/${extension.name}/share/filelist.md5" append="true"/>
+            <redirector output="${filelist.md5.path}/share/filelist.md5" append="true"/>
         </apply>
 
         <!-- removes the absolute part of the path -->
         <!-- and only let the relative one         -->
         <replaceregexp byline="true">
-            <regexp pattern="${user.dir}/${build.dir}/${extension.name}/"/>
+            <regexp pattern="${trim.regex}"/>
             <substitution expression=""/>
-            <fileset file="${build.dir}/${extension.name}/share/filelist.md5"/>
+            <fileset file="${filelist.md5.path}/share/filelist.md5"/>
         </replaceregexp>
     </target>
 
