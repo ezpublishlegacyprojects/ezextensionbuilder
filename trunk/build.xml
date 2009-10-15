@@ -90,11 +90,6 @@
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
     <target name="init" depends="clean-all,resolve-dependencies" description="Prepares the extension to be built">
-
-        <!-- Required by ant-contrib             -->
-        <!-- http://ant-contrib.sourceforge.net/ -->
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
         <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
         <propertycopy name="version.major"   from="${extension.name}.version.major"/>
         <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
@@ -162,6 +157,7 @@
     <target name="all" description="Build the extension and generate the tarball">
         <antcall target="build"/>
         <antcall target="dist"/>
+        <antcall target="build-dependencies"/>
     </target>
 
     <!-- Removes the generated tarball -->
@@ -451,6 +447,58 @@
         </replaceregexp>
     </target>
 
+    <!-- Build dependant extensions                                                           -->
+    <!-- In order to add a new dependency                                                     -->
+    <!-- You must add the following properties                                                -->
+    <!-- in your current extension                                                            -->
+    <!-- external.dependency.<extension-name>.repository = http://url/to/ext/repository       -->
+    <!--                                                                                      -->
+    <!-- The build system expects the dependant extension follow the same directory structure -->
+    <!-- as described in the README file                                                      -->
+    <target name="build-dependencies" depends="resolve-dependencies" description="Build dependent extensions">
+
+        <!-- fetches the list of available dependencies -->
+        <!-- \1 : extension name -->
+        <propertyselector property="dependency.list"
+                                delimiter=","
+                                match="external.dependency.([^\.]*)"
+                                select="\1"
+                                casesensitive="false" />
+
+        <echo message="${dependency.list}"/>
+
+        <foreach list="${dependency.list}"
+                 delimiter=","
+                 target="-build-dependency"
+                 param="dependant.extension.name"/>
+    </target>
+
+    <!-- Note this is a private target !!! -->
+    <target name="-build-dependency" description="Builds a dependency">
+        <echo message="Building dependant extension : ${dependant.extension.name}"/>
+
+        <delete dir="${build.dir}/packages"/>
+
+        <propertycopy name="dependant.extension.repository" from="external.dependency.${dependant.extension.name}.repository"/>
+
+        <!-- downloading build file -->
+        <get src="${dependant.extension.repository}/build.xml"
+             dest="${dependant.extension.name}-build.xml"/>
+
+        <!-- downloading properties file -->
+        <get src="${dependant.extension.repository}/ant/${dependant.extension.name}.properties"
+             dest="ant/${dependant.extension.name}.properties"/>
+
+        <ant antfile="${dependant.extension.name}-build.xml"
+             dir="."
+             target="all"
+             inheritAll="true"/>
+
+        <delete file="ant/${dependant.extension.name}.properties"/>
+
+        <delete file="${dependant.extension.name}-build.xml"/>
+    </target>
+
     <!-- ==================== -->
     <!-- Ivy specific targets -->
     <!-- ==================== -->
@@ -485,6 +533,10 @@
 
         <ivy:resolve file="ivy.xml"/>
         <ivy:retrieve pattern="${user.home}/.ant/lib/[artifact]-[revision]-[type].[ext]"/>
+
+        <!-- Required by ant-contrib             -->
+        <!-- http://ant-contrib.sourceforge.net/ -->
+        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
     </target>
 
     <!-- ===================== -->
