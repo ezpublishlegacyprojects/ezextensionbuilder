@@ -128,8 +128,8 @@
         <antcall target="check-sql-files"/>
         <antcall target="check-gnu-files"/>
         <antcall target="eznetwork-certify"/>
-        <antcall target="generate-ezpackage-xml-definition"/>
         <antcall target="update-package-xml"/>
+        <antcall target="generate-ezpackage-xml-definition"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
@@ -439,28 +439,28 @@
                    filepath="${build.dir}"
                    property="ezpackage.xml.exists"/>
 
-            <if>
-                <equals arg1="${ezpackage.xml.exists}" arg2="true"/>
-                <then>
-                    <echo message="Building XML file list for extension ${extension.name}"/>
+        <if>
+            <equals arg1="${ezpackage.xml.exists}" arg2="true"/>
+            <then>
+                <echo message="Building XML file list for extension ${extension.name}"/>
 
-                    <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ezpxmlextfilelist.php"
-                        file="ezpxmlextfilelist.php"
-                        usetimestamp="true"/>
+                <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ezpxmlextfilelist.php"
+                    file="ezpxmlextfilelist.php"
+                    usetimestamp="true"/>
 
-                    <apply executable="${php.cli.executable.path}" failonerror="true">
-                        <arg value="ezpxmlextfilelist.php"/>
-                        <arg value="-e"/>
-                        <arg value="${build.dir}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
-                        <arg value="-n"/>
-                        <arg value="${extension.name}"/>
-                        <redirector output="${build.dir}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
-                    </apply>
-                </then>
-                <else>
-                    <echo message="No packages found no need to generate anything"/>
-                </else>
-            </if>
+                <apply executable="${php.cli.executable.path}" failonerror="true">
+                    <arg value="ezpxmlextfilelist.php"/>
+                    <arg value="-e"/>
+                    <arg value="${build.dir}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
+                    <arg value="-n"/>
+                    <arg value="${extension.name}"/>
+                    <redirector output="${build.dir}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
+                </apply>
+            </then>
+            <else>
+                <echo message="No packages found no need to generate anything"/>
+            </else>
+        </if>
     </target>
 
     <!-- Updates package.xml version numbers          -->
