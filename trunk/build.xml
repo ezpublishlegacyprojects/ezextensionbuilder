@@ -530,6 +530,44 @@
                  param="dependant.extension.name"/>
     </target>
 
+    <!-- Creates a tarball for each ezpackage                             -->
+    <!-- in order to use this target the <extension.name>.properties file -->
+    <!-- must contain the following properties                            -->
+    <!--                                                                  -->
+    <!-- package.<packagename>.name = <packagename>                       -->
+    <target name="create-package-tarballs" depends="ivy-resolve-dependencies" description="Creates tarballs for ezpackages.">
+
+        <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/createzpkg.sh"
+             usetimestamp="true"/>
+
+        <!-- fetches the list of available dependencies -->
+        <!-- \1 : extension name -->
+        <propertyselector property="ezpackage.list"
+                                delimiter=","
+                                match="^package.([^\.]*)$"
+                                select="\1"
+                                casesensitive="false" />
+
+        <foreach list="${ezpackage.list}"
+                 delimiter=","
+                 target="-create-package-tarball"
+                 param="ezpackage.name"/>
+
+        <delete file="createzpkg.sh"/>
+    </target>
+
+    <!-- Note this is a private target !!! -->
+    <target name="-create-package-tarball" description="Creates a tarball of an ezpackage.">
+        <echo message="Building ${ezpackage.name}.ezpkg"/>
+
+        <!-- Switched to the system tar command                             -->
+        <!-- Ref : https://issues.apache.org/bugzilla/show_bug.cgi?id=47653 -->
+        <apply executable="createzpkg.sh" dir=".">
+            <arg value="${build.dir}/${extension.name}/packages/${ezpackage.name}"/>
+            <arg value="${build.dir}/${ezpackage.name}"/>
+        </apply>
+    </target>
+
     <!-- Note this is a private target !!! -->
     <target name="-build-dependency" description="Builds a dependency">
         <echo message="Building dependant extension : ${dependant.extension.name}"/>
