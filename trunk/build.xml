@@ -89,7 +89,7 @@
     <!-- Prepares the build directory    -->
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
-    <target name="init" depends="clean-all,resolve-dependencies" description="Prepares the extension to be built">
+    <target name="init" depends="clean-all,ivy-resolve-dependencies" description="Prepares the extension to be built">
         <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
         <propertycopy name="version.major"   from="${extension.name}.version.major"/>
         <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
@@ -455,7 +455,7 @@
     <!--                                                                                      -->
     <!-- The build system expects the dependant extension follow the same directory structure -->
     <!-- as described in the README file                                                      -->
-    <target name="build-dependencies" depends="resolve-dependencies" description="Build dependent extensions">
+    <target name="build-dependencies" depends="ivy-resolve-dependencies" description="Build dependent extensions">
 
         <!-- fetches the list of available dependencies -->
         <!-- \1 : extension name -->
@@ -505,7 +505,7 @@
 
     <!-- Downloads Ivy from web site so that it            -->
     <!-- can be used even without any special installation -->
-    <target name="download-ivy" unless="offline" description="Downloads Ivy">
+    <target name="ivy-download" unless="offline" description="Downloads Ivy">
         <mkdir dir="${ivy.jar.dir}"/>
         <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
              dest="${ivy.jar.file}" usetimestamp="true"/>
@@ -515,7 +515,7 @@
     <!-- it into ant's lib dir (note that the latter copy will always take precedence). -->
     <!-- We will not fail as long as local lib dir exists (it may be empty) and         -->
     <!-- ivy is in at least one of ant's lib dir or the local lib dir.                  -->
-    <target name="init-ivy" depends="download-ivy" description="Install Ivy">
+    <target name="ivy-init" depends="ivy-download" description="Install Ivy">
         <path id="ivy.lib.path">
             <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
         </path>
@@ -526,7 +526,7 @@
     </target>
 
     <!-- Retrieves dependencies with Ivy -->
-    <target name="resolve-dependencies" depends="init-ivy" unless="offline" description="Retrieves dependencies with ivy">
+    <target name="ivy-resolve-dependencies" depends="ivy-init" unless="offline" description="Retrieves dependencies with ivy">
         <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ivy.xml"
              dest="ivy.xml"
              usetimestamp="true"/>
