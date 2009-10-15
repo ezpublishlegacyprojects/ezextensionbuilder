@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="eZExtensionBuilder" default="help">
+<project name="eZExtensionBuilder" default="help">
 
     <description>eZExtensionBuilder build file</description>
 
-    <!-- ========= -->
-    <!-- Ivy Stuff -->
-    <!-- ========= -->
-
-    <property name="ivy.install.version" value="2.1.0" />
-
-    <condition property="ivy.home" value="${env.IVY_HOME}">
-      <isset property="env.IVY_HOME" />
-    </condition>
-
-    <property name="ivy.home"         value="${user.home}/.ant" />
-    <property name="ivy.jar.dir"      value="${ivy.home}/lib" />
-    <property name="ivy.jar.file"     value="${ivy.jar.dir}/ivy.jar" />
-    <property name="ivy.download.url" value="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"/>
-
-    <!-- =================== -->
-    <!-- Ivy Stuff : nirvana -->
-    <!-- =================== -->
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
     <!-- ================== -->
     <!-- Build properties   -->
@@ -64,6 +47,13 @@
         <include name="**/*.rst"/>
     </patternset>
 
+    <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
+    <propertycopy name="version.major"   from="${extension.name}.version.major"/>
+    <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
+    <propertycopy name="version.release" from="${extension.name}.version.release"/>
+    <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
+    <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
+
     <!-- =================== -->
     <!-- /Build properties   -->
     <!-- =================== -->
@@ -89,13 +79,7 @@
     <!-- Prepares the build directory    -->
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
-    <target name="init" depends="clean-all,ivy-resolve-dependencies" description="Prepares the extension to be built">
-        <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
-        <propertycopy name="version.major"   from="${extension.name}.version.major"/>
-        <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
-        <propertycopy name="version.release" from="${extension.name}.version.release"/>
-        <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
-        <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
+    <target name="init" description="Prepares the extension to be built">
 
         <!--
         <taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -513,7 +497,7 @@
     <!--                                                                                      -->
     <!-- The build system expects the dependant extension follow the same directory structure -->
     <!-- as described in the README file                                                      -->
-    <target name="build-dependencies" depends="ivy-resolve-dependencies" description="Build dependent extensions">
+    <target name="build-dependencies" description="Build dependent extensions">
 
         <!-- fetches the list of available dependencies -->
         <!-- \1 : extension name -->
@@ -535,8 +519,8 @@
     <!-- in order to use this target the <extension.name>.properties file -->
     <!-- must contain the following properties                            -->
     <!--                                                                  -->
-    <!-- package.<packagename>.name = <packagename>                       -->
-    <target name="create-package-tarballs" depends="ivy-resolve-dependencies" description="Creates tarballs for ezpackages.">
+    <!-- <extensionname>.package.<packagename>.name = <packagename>       -->
+    <target name="create-package-tarballs" description="Creates tarballs for ezpackages.">
 
         <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/createzpkg.sh"
              dest="createzpkg.sh"
@@ -548,7 +532,7 @@
         <!-- \1 : extension name -->
         <propertyselector property="ezpackage.list"
                                 delimiter=","
-                                match="^package.([^\.]*)$"
+                                match="^${extension.name}.package.([^\.]*)$"
                                 select="\1"
                                 casesensitive="false" />
 
@@ -564,8 +548,6 @@
     <target name="-create-package-tarball" description="Creates a tarball of an ezpackage.">
         <echo message="Building ${ezpackage.name}.ezpkg"/>
 
-        <echo message="./createzpkg.sh ${build.dir}/${extension.name}/packages/${ezpackage.name} ${build.dir}/${ezpackage.name}"/>
-
         <!-- Switched to the system tar command                             -->
         <!-- Ref : https://issues.apache.org/bugzilla/show_bug.cgi?id=47653 -->
         <exec executable="./createzpkg.sh">
@@ -580,7 +562,7 @@
 
         <delete dir="${build.dir}/packages"/>
 
-        <propertycopy name="dependant.extension.repository" from="external.dependency.${dependant.extension.name}.repository"/>
+        <propertycopy name="dependant.extension.repository" from="${extension.name}.external.dependency.${dependant.extension.name}.repository"/>
 
         <!-- downloading build file -->
         <get src="${dependant.extension.repository}/build.xml"
@@ -599,49 +581,5 @@
 
         <delete file="${dependant.extension.name}-build.xml"/>
     </target>
-
-    <!-- ==================== -->
-    <!-- Ivy specific targets -->
-    <!-- ==================== -->
-
-    <!-- Downloads Ivy from web site so that it            -->
-    <!-- can be used even without any special installation -->
-    <target name="ivy-download" unless="offline" description="Downloads Ivy">
-        <mkdir dir="${ivy.jar.dir}"/>
-        <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
-             dest="${ivy.jar.file}" usetimestamp="true"/>
-    </target>
-
-    <!-- try to load ivy here from ivy home, in case the user has not already dropped   -->
-    <!-- it into ant's lib dir (note that the latter copy will always take precedence). -->
-    <!-- We will not fail as long as local lib dir exists (it may be empty) and         -->
-    <!-- ivy is in at least one of ant's lib dir or the local lib dir.                  -->
-    <target name="ivy-init" depends="ivy-download" description="Install Ivy">
-        <path id="ivy.lib.path">
-            <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
-        </path>
-
-        <taskdef resource="org/apache/ivy/ant/antlib.xml"
-                 uri="antlib:org.apache.ivy.ant"
-                 classpathref="ivy.lib.path"/>
-    </target>
-
-    <!-- Retrieves dependencies with Ivy -->
-    <target name="ivy-resolve-dependencies" depends="ivy-init" unless="offline" description="Retrieves dependencies with ivy">
-        <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ivy.xml"
-             dest="ivy.xml"
-             usetimestamp="true"/>
-
-        <ivy:resolve file="ivy.xml"/>
-        <ivy:retrieve pattern="${user.home}/.ant/lib/[artifact]-[revision]-[type].[ext]"/>
-
-        <!-- Required by ant-contrib             -->
-        <!-- http://ant-contrib.sourceforge.net/ -->
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-    </target>
-
-    <!-- ===================== -->
-    <!-- /Ivy specific targets -->
-    <!-- ===================== -->
 
 </project>
