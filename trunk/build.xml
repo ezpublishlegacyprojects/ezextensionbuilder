@@ -130,6 +130,7 @@
         <antcall target="eznetwork-certify"/>
         <antcall target="update-package-xml"/>
         <antcall target="generate-ezpackage-xml-definition"/>
+        <antcall target="create-package-tarballs"/>
     </target>
 
     <!-- Removes the entire build/ directory -->
