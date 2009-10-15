@@ -538,7 +538,10 @@
     <target name="create-package-tarballs" depends="ivy-resolve-dependencies" description="Creates tarballs for ezpackages.">
 
         <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/createzpkg.sh"
+             dest="createzpkg.sh"
              usetimestamp="true"/>
+
+        <chmod file="createzpkg.sh" perm="ug+x"/>
 
         <!-- fetches the list of available dependencies -->
         <!-- \1 : extension name -->
@@ -560,12 +563,14 @@
     <target name="-create-package-tarball" description="Creates a tarball of an ezpackage.">
         <echo message="Building ${ezpackage.name}.ezpkg"/>
 
+        <echo message="./createzpkg.sh ${build.dir}/${extension.name}/packages/${ezpackage.name} ${build.dir}/${ezpackage.name}"/>
+
         <!-- Switched to the system tar command                             -->
         <!-- Ref : https://issues.apache.org/bugzilla/show_bug.cgi?id=47653 -->
-        <apply executable="createzpkg.sh" dir=".">
+        <exec executable="./createzpkg.sh">
             <arg value="${build.dir}/${extension.name}/packages/${ezpackage.name}"/>
             <arg value="${build.dir}/${ezpackage.name}"/>
-        </apply>
+        </exec>
     </target>
 
     <!-- Note this is a private target !!! -->
