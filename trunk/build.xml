@@ -125,8 +125,7 @@
         <antcall target="update-license-headers"/>
         <antcall target="generate-documentation"/>
         <antcall target="generate-md5sums"/>
-        <antcall target="check-schema-sql"/>
-        <antcall target="check-dba-file"/>
+        <antcall target="check-sql-files"/>
         <antcall target="check-gnu-files"/>
         <antcall target="eznetwork-certify"/>
         <antcall target="generate-ezpackage-xml-definition"/>
@@ -295,61 +294,70 @@
     <!--         |__ cleandata.sql                  -->
     <!--         `__ schema.sql                     -->
     <!--                                            -->
-    <target name="check-schema-sql" description="Checks if a schema.sql / cleandata.sql is available for supported databases">
+    <target name="check-sql-files" description="Checks if a schema.sql / cleandata.sql is available for supported databases">
         <echo message="Checking for schema.sql and cleandata.sql"/>
 
-        <!-- mysql/schema.sql -->
-        <available file="schema.sql"
-                   filepath="${build.dir}/${extension.name}/sql/mysql"
-                   property="mysql.schema.exists"/>
-        <fail unless="mysql.schema.exists" message="sql/mysql/schema.sql file doesn't exist !"/>
+        <available file="sql"
+                   filepath="${build.dir}/${extension.name}"
+                   property="sql.dir.exists"/>
 
-        <!-- mysql/cleandata.sql -->
-        <available file="cleandata.sql"
-                   filepath="${build.dir}/${extension.name}/sql/mysql"
-                   property="mysql.cleandata.exists"/>
-        <fail unless="mysql.cleandata.exists" message="sql/mysql/cleandata.sql file doesn't exist !"/>
+        <if>
+            <equals arg1="${sql.dir.exists}" arg2="true"/>
+            <then>
+                <!-- mysql/schema.sql -->
+                <available file="schema.sql"
+                        filepath="${build.dir}/${extension.name}/sql/mysql"
+                        property="mysql.schema.exists"/>
+                <fail unless="mysql.schema.exists" message="sql/mysql/schema.sql file doesn't exist !"/>
 
-        <!-- postgresql/schema.sql -->
-        <available file="schema.sql"
-                   filepath="${build.dir}/${extension.name}/sql/postgresql"
-                   property="postgresql.schema.exists"/>
-        <fail unless="postgresql.schema.exists" message="sql/postgresql/schema.sql file doesn't exist !"/>
+                <!-- mysql/cleandata.sql -->
+                <available file="cleandata.sql"
+                        filepath="${build.dir}/${extension.name}/sql/mysql"
+                        property="mysql.cleandata.exists"/>
+                <fail unless="mysql.cleandata.exists" message="sql/mysql/cleandata.sql file doesn't exist !"/>
 
-        <!-- postgresql/cleandata.sql -->
-        <available file="cleandata.sql"
-                   filepath="${build.dir}/${extension.name}/sql/postgresql"
-                   property="postgresql.cleandata.exists"/>
-        <fail unless="postgresql.cleandata.exists" message="sql/postgresql/cleandata.sql file doesn't exist !"/>
+                <!-- postgresql/schema.sql -->
+                <available file="schema.sql"
+                        filepath="${build.dir}/${extension.name}/sql/postgresql"
+                        property="postgresql.schema.exists"/>
+                <fail unless="postgresql.schema.exists" message="sql/postgresql/schema.sql file doesn't exist !"/>
 
-        <!-- oracle/schema.sql -->
-        <available file="schema.sql"
-                   filepath="${build.dir}/${extension.name}/sql/oracle"
-                   property="oracle.schema.exists"/>
-        <fail unless="oracle.schema.exists" message="sql/oracle/schema.sql file doesn't exist !"/>
+                <!-- postgresql/cleandata.sql -->
+                <available file="cleandata.sql"
+                        filepath="${build.dir}/${extension.name}/sql/postgresql"
+                        property="postgresql.cleandata.exists"/>
+                <fail unless="postgresql.cleandata.exists" message="sql/postgresql/cleandata.sql file doesn't exist !"/>
 
-        <!-- oracle/cleandata.sql -->
-        <available file="cleandata.sql"
-                   filepath="${build.dir}/${extension.name}/sql/oracle"
-                   property="oracle.cleandata.exists"/>
-        <fail unless="oracle.cleandata.exists" message="sql/oracle/cleandata.sql file doesn't exist !"/>
-    </target>
+                <!-- oracle/schema.sql -->
+                <available file="schema.sql"
+                        filepath="${build.dir}/${extension.name}/sql/oracle"
+                        property="oracle.schema.exists"/>
+                <fail unless="oracle.schema.exists" message="sql/oracle/schema.sql file doesn't exist !"/>
 
-    <!-- Checks if a .dba files exists for this extension -->
-    <target name="check-dba-file" description="Checks if a .dba file is available for this extension">
-        <echo message="Checking for .dba files"/>
+                <!-- oracle/cleandata.sql -->
+                <available file="cleandata.sql"
+                        filepath="${build.dir}/${extension.name}/sql/oracle"
+                        property="oracle.cleandata.exists"/>
+                <fail unless="oracle.cleandata.exists" message="sql/oracle/cleandata.sql file doesn't exist !"/>
 
-        <!-- share/db_schema.dba -->
-        <available file="db_schema.dba"
-                   filepath="${build.dir}/${extension.name}/share/"
-                   property="db.schema.dba.exists"/>
-        <fail unless="db.schema.dba.exists" message="db_schema.dba file doesn't exist!"/>
+                <!-- Last but not least, .dba files -->
+                <!-- share/db_schema.dba -->
+                <available file="db_schema.dba"
+                        filepath="${build.dir}/${extension.name}/share/"
+                        property="db.schema.dba.exists"/>
+                <fail unless="db.schema.dba.exists" message="db_schema.dba file doesn't exist!"/>
 
-        <!-- share/db_schema.dba -->
-        <available file="db_data.dba"
-                   filepath="${build.dir}/${extension.name}/share/"
-                   property="db.data.dba.exists"/>
-        <fail unless="db.data.dba.exists" message="db_data.dba file doesn't exist!"/>
+                <!-- share/db_schema.dba -->
+                <available file="db_data.dba"
+                        filepath="${build.dir}/${extension.name}/share/"
+                        property="db.data.dba.exists"/>
+                <fail unless="db.data.dba.exists" message="db_data.dba file doesn't exist!"/>
+
+            </then>
+            <else>
+                <echo message="This extension does not do anything on the database, skipping"/>
+            </else>
+        </if>
     </target>
 
     <!-- Runs the eZ Network certification utility -->
