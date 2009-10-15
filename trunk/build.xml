@@ -494,16 +494,52 @@
         <!-- \1 : extension name -->
         <propertyselector property="dependency.list"
                                 delimiter=","
-                                match="external.dependency.([^\.]*)"
+                                match="${extension.name}.external.dependency.([^\.]*)"
                                 select="\1"
                                 casesensitive="false" />
 
-        <echo message="${dependency.list}"/>
+        <if>
+            <isset property="dependency.list"/>
+            <then>
+                <foreach list="${dependency.list}"
+                        delimiter=","
+                        target="-build-dependency"
+                        param="dependant.extension.name"/>
+            </then>
+        </if>
+    </target>
 
-        <foreach list="${dependency.list}"
-                 delimiter=","
-                 target="-build-dependency"
-                 param="dependant.extension.name"/>
+    <!-- Note this is a private target !!! -->
+    <target name="-build-dependency" description="Builds a dependency">
+        <echo message="Building dependant extension : ${dependant.extension.name}"/>
+
+        <delete dir="${build.dir}/packages"/>
+
+        <propertycopy name="dependant.extension.repository" from="${extension.name}.external.dependency.${dependant.extension.name}.repository"/>
+
+        <!-- downloading build file -->
+        <!--
+        <get src="${dependant.extension.repository}/build.xml"
+            dest="${dependant.extension.name}-build.xml"/>
+        -->
+
+        <!-- downloading properties file -->
+        <get src="${dependant.extension.repository}/ant/${dependant.extension.name}.properties"
+            dest="ant/${dependant.extension.name}.properties"
+            usetimestamp="true"/>
+
+        <var name="extension.name" unset="true"/>
+
+        <ant antfile="build.xml"
+            dir="."
+            target="all"
+            inheritAll="true">
+            <property name="extension.name" value="${dependant.extension.name}"/>
+        </ant>
+
+        <delete file="ant/${dependant.extension.name}.properties"/>
+
+        <!-- <delete file="${dependant.extension.name}-build.xml"/> -->
     </target>
 
     <!-- Creates a tarball for each ezpackage                             -->
@@ -527,10 +563,15 @@
                                 select="\1"
                                 casesensitive="false" />
 
-        <foreach list="${ezpackage.list}"
-                 delimiter=","
-                 target="-create-package-tarball"
-                 param="ezpackage.name"/>
+        <if>
+            <isset property="ezpackage.list"/>
+            <then>
+                <foreach list="${ezpackage.list}"
+                        delimiter=","
+                        target="-create-package-tarball"
+                        param="ezpackage.name"/>
+            </then>
+        </if>
 
         <delete file="createzpkg.sh"/>
     </target>
@@ -546,31 +587,4 @@
             <arg value="${build.dir}/${ezpackage.name}"/>
         </exec>
     </target>
-
-    <!-- Note this is a private target !!! -->
-    <target name="-build-dependency" description="Builds a dependency">
-        <echo message="Building dependant extension : ${dependant.extension.name}"/>
-
-        <delete dir="${build.dir}/packages"/>
-
-        <propertycopy name="dependant.extension.repository" from="${extension.name}.external.dependency.${dependant.extension.name}.repository"/>
-
-        <!-- downloading build file -->
-        <get src="${dependant.extension.repository}/build.xml"
-             dest="${dependant.extension.name}-build.xml"/>
-
-        <!-- downloading properties file -->
-        <get src="${dependant.extension.repository}/ant/${dependant.extension.name}.properties"
-             dest="ant/${dependant.extension.name}.properties"/>
-
-        <ant antfile="${dependant.extension.name}-build.xml"
-             dir="."
-             target="all"
-             inheritAll="true"/>
-
-        <delete file="ant/${dependant.extension.name}.properties"/>
-
-        <delete file="${dependant.extension.name}-build.xml"/>
-    </target>
-
 </project>
