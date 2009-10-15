@@ -80,15 +80,6 @@
     <!-- Creates the build/ directory if -->
     <!-- does not already exists         -->
     <target name="init" description="Prepares the extension to be built">
-
-        <!--
-        <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-            <classpath>
-                <pathelement location="${user.home}/.ant/lib/ant-contrib-1.0b3-jar.jar"/>
-            </classpath>
-        </taskdef>
-        -->
-
         <mkdir dir="${build.dir}"/>
 
         <!-- svn export repository -->
