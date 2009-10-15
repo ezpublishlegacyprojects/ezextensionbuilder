@@ -215,7 +215,7 @@
                 to="${build.dir}/${extension.name}/doc/*.html"/>
 
         <apply executable="rst2html.py" failonerror="true">
-            <fileset dir="${build.dir}/${extension.name}/doc">
+            <fileset dir="${build.dir}">
                 <patternset refid="rst.sources"/>
             </fileset>
             <srcfile/>
