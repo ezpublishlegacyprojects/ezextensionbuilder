@@ -24,7 +24,7 @@ be the following :
     myextension.version.major     = 1
     myextension.version.minor     = 0
     myextension.version.release   = 0Alpha1
-    myextension.svn.trunk.url     = http://url/to/your/svn/repos/trunk
+    myextension.svn.url           = http://url/to/your/svn/repository
 
 For example, for the ezoe extension, you should get this :
 
@@ -41,7 +41,7 @@ And the ezoe.properties
     ezoe.version.major     = 5
     ezoe.version.minor     = 1
     ezoe.version.release   = 0Alpha1
-    ezoe.svn.trunk.url     = http://svn.projects.ez.no/ezoe/trunk/ezoe/
+    ezoe.svn.url           = http://svn.projects.ez.no/ezoe/trunk/ezoe/
 
 If your extension contains a package.xml file, then you also need to
 provide the following properties with the version of eZ Publish you

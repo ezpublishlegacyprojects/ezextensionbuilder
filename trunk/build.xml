@@ -46,7 +46,7 @@
     <!-- <extensionname>.version.major     = xxx                     -->
     <!-- <extensionname>.version.minor     = yyy                     -->
     <!-- <extensionname>.version.release   = zzzz                    -->
-    <!-- <extensionname>.svn.trunk.url     = http://url.com/to/trunk -->
+    <!-- <extensionname>.svn.url           = http://url.com/to/svn/ -->
     <!--                                                             -->
     <property file="./ant/${extension.name}.properties"/>
 
@@ -100,7 +100,7 @@
         <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
         <propertycopy name="version.release" from="${extension.name}.version.release"/>
         <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
-        <propertycopy name="svn.url"         from="${extension.name}.svn.trunk.url" />
+        <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
 
         <!--
         <taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -397,7 +397,7 @@
                 <arg value="-n"/>
                 <arg value="${extension.name}"/>
                 <redirector output="${build.dir}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
-            </exec>
+            </apply>
         </available>
     </target>
 
