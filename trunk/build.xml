@@ -227,7 +227,7 @@
         <!-- A few extension have Makefiles to generate documentation -->
         <!-- We have to remove them as well as original .rst files    -->
         <delete>
-            <fileset dir="${build.dir}/${extension.name}\doc/">
+            <fileset dir="${build.dir}">
                 <patternset refid="rst.sources"/>
                 <include name="Makefile"/>
             </fileset>
