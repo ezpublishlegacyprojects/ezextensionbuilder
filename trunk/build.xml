@@ -373,14 +373,40 @@
         <!-- LICENSE -->
         <available file="LICENSE"
                    filepath="${build.dir}/${extension.name}"
-                   property="gnu.license.exists"/>
-        <fail unless="gnu.license.exists" message="LICENSE file doesn't exist!"/>
+                   property="gnu.license.extension.exists"/>
+
+        <available file="LICENSE"
+                filepath="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
+                property="gnu.license.package.exists"/>
+
+        <if>
+            <and>
+                <equals arg1="gnu.license.extension.exists" arg2="false"/>
+                <equals arg1="gnu.license.package.exists"   arg2="false"/>
+            </and>
+            <then>
+                <fail message="LICENSE file doesn't exist!"/>
+            </then>
+        </if>
 
         <!-- README -->
         <available file="README"
                    filepath="${build.dir}/${extension.name}"
-                   property="gnu.readme.exists"/>
-        <fail unless="gnu.readme.exists" message="README file doesn't exist!"/>
+                   property="gnu.readme.extension.exists"/>
+
+        <available file="README"
+                   filepath="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
+                   property="gnu.readme.package.exists"/>
+
+        <if>
+            <and>
+                <equals arg1="gnu.readme.extension.exists" arg2="false"/>
+                <equals arg1="gnu.readme.package.exists"   arg2="false"/>
+            </and>
+            <then>
+                <fail message="README file doesn't exist!"/>
+            </then>
+        </if>
     </target>
 
     <!-- Generates an XML definition for eZ Publish extension package types       -->
