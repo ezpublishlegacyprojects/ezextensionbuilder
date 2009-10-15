@@ -43,6 +43,16 @@ And the ezoe.properties
     ezoe.version.release   = 0Alpha1
     ezoe.svn.trunk.url     = http://svn.projects.ez.no/ezoe/trunk/ezoe/
 
+If your extension contains a package.xml file, then you also need to
+provide the following properties with the version of eZ Publish you
+want you package.xml be built against
+
+::
+
+    ezp.version.major   = X
+    ezp.version.minor   = Y
+    ezp.version.release = Z
+
 
 2. Downloading the bootstrap file
 ---------------------------------
@@ -53,16 +63,21 @@ root folder of your extension
 3. Launching the bootstrap file
 -------------------------------
 
-ant -f bootstrap.xml
+::
+
+    ant -f bootstrap.xml
 
 4. Launching the final build
 -----------------------------
 
-ant all -Dextension.name=yourextension
+::
 
+    ant all -Dextension.name=yourextension
 
 run
 
 ::
 
-    ant -p to get a list of all available targets
+    ant -p
+
+to get a list of all available targets

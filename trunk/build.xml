@@ -377,6 +377,70 @@
         <fail unless="gnu.readme.exists" message="README file doesn't exist!"/>
     </target>
 
+    <!-- Generates an XML definition for eZ Publish extension package types       -->
+    <!-- Only useful if you want to build your extension as an eZ Publish package -->
+    <target name="generate-ezpackage-xml-definition" description="Generates an XML definition for eZ Publish extension package types">
+        <available file="packages/${extension.name}_extension/ezextension/${extension.name}"
+                   filepath="${build.dir}"
+                   property="ezpackage.xml.exists">
+
+            <echo message="Building XML file list for extension ${extension.name}"/>
+
+            <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ezpxmlextfilelist.php"
+                file="ezpxmlextfilelist.php"
+                usetimestamp="true"/>
+
+            <apply executable="${php.cli.executable.path}" failonerror="true">
+                <arg value="ezpxmlextfilelist.php"/>
+                <arg value="-e"/>
+                <arg value="${build.dir}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
+                <arg value="-n"/>
+                <arg value="${extension.name}"/>
+                <redirector output="${build.dir}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
+            </exec>
+        </available>
+    </target>
+
+    <!-- Updates package.xml version numbers          -->
+    <!-- This is mainly useful for eZFlow and eZWebin -->
+    <target name="update-package-xml" description="Updates version numbers in package.xml">
+        <echo message="Updating package.xml with correct version numbers"/>
+
+        <!-- <version>xxx</version> -->
+        <replaceregexp byline="true" flags="m">
+            <regexp pattern='^(    \074version\076)(.*)(\074/version\076)$'/>
+            <substitution expression='\1${ezp.version.major}.${ezp.version.minor}.${ezp.version.release}\3'/>
+            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+        </replaceregexp>
+
+        <!-- <named-version>xxx</named-version> -->
+        <replaceregexp byline="true" flags="m">
+            <regexp pattern='^(    \074named-version\076)(.*)(\074/named-version\076)$'/>
+            <substitution expression='\1${ezp.version.major}.${ezp.version.minor}\3'/>
+            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+        </replaceregexp>
+
+        <!-- <package version="zzzz" -->
+        <replaceregexp byline="true">
+            <regexp pattern='^(\074package version=")(.*)(")$'/>
+            <substitution expression='\1${version.major}.${version.minor}-${version.release}\3'/>
+            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+        </replaceregexp>
+
+        <!-- <number>xxxx</number> -->
+        <replaceregexp byline="true">
+            <regexp pattern='^(    \074number\076)(.*)(\074/number\076)$'/>
+            <substitution expression='\1${version.alias}\3'/>
+            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+        </replaceregexp>
+
+        <!-- <release>yyy</release> -->
+        <replaceregexp byline="true">
+            <regexp pattern='^(    \074release\076)(.*)(\074/release\076)$'/>
+            <substitution expression='\1${version.release}\3'/>
+            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+        </replaceregexp>
+    </target>
 
     <!-- ==================== -->
     <!-- Ivy specific targets -->
