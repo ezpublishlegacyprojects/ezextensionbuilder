@@ -113,3 +113,14 @@ Example of properties file, ezwebin.properties
     ezwebin.external.dependency.ezwt.repository           = http://svn.projects.ez.no/ezwebsitetoolbar/trunk
     ezwebin.external.dependency.ezgmaplocation.repository = http://svn.projects.ez.no/ezgmaplocation/trunk
     ezwebin.external.dependency.ezstarrating.repository   = http://svn.projects.ez.no/ezstarrating/trunk
+
+FAQ
+---
+
+"Property '${extension.name}.version.major' is not defined" error message
+
+This is because you forgot to define and extension name, the correct command to use is :
+
+::
+
+    ant <target name> -Dextension.name=<yourextension>
