@@ -51,8 +51,9 @@
     <propertycopy name="version.major"   from="${extension.name}.version.major"/>
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
-    <propertycopy name="version.alias"   from="${extension.name}.version.alias"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
+
+    <property name="version.alias" value="${version.major}.${version.minor}"/>
 
     <!-- =================== -->
     <!-- /Build properties   -->
