@@ -300,6 +300,7 @@
     <!--                                            -->
     <target name="check-sql-files" description="Checks if a schema.sql / cleandata.sql is available for supported databases">
         <echo message="Checking for schema.sql and cleandata.sql"/>
+        <echo message="Use 'php bin/php/ezsqldumpschema.php --output-types=all --format=generic --type=mysql --output-array --user=someuser --password=somepassword somedatabase database.dba' if you want to build your own"/>
 
         <available file="sql"
                    filepath="${build.dir}/${extension.name}"
