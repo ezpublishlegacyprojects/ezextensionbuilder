@@ -372,7 +372,7 @@
 
     <!-- Checks for the presence of LICENSE and README files -->
     <target name="check-gnu-files" description="Checks for LICENSE and README files">
-        <echo message="Checing for LICENSE and README files"/>
+        <echo message="Checking for LICENSE and README files"/>
 
         <!-- LICENSE -->
         <available file="LICENSE"
@@ -385,8 +385,8 @@
 
         <if>
             <and>
-                <equals arg1="gnu.license.extension.exists" arg2="false"/>
-                <equals arg1="gnu.license.package.exists"   arg2="false"/>
+                <isfalse value="${gnu.license.extension.exists}"/>
+                <isfalse value="${gnu.license.package.exists}"/>
             </and>
             <then>
                 <fail message="LICENSE file doesn't exist!"/>
@@ -404,8 +404,8 @@
 
         <if>
             <and>
-                <equals arg1="gnu.readme.extension.exists" arg2="false"/>
-                <equals arg1="gnu.readme.package.exists"   arg2="false"/>
+                <isfalse value="${gnu.readme.extension.exists}"/>
+                <isfalse value="${gnu.readme.package.exists}"/>
             </and>
             <then>
                 <fail message="README file doesn't exist!"/>
