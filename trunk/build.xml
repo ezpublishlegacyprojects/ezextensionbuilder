@@ -47,6 +47,10 @@
         <include name="**/*.rst"/>
     </patternset>
 
+    <patternset id="package.xml">
+        <include name="**/*package.xml"/>
+    </patternset>
+
     <!-- http://ant-contrib.sourceforge.net/tasks/tasks/propertycopy.html -->
     <propertycopy name="version.major"   from="${extension.name}.version.major"/>
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
@@ -449,35 +453,45 @@
         <replaceregexp byline="true" flags="m">
             <regexp pattern='^(    \074version\076)(.*)(\074/version\076)$'/>
             <substitution expression='\1${ezp.version.major}.${ezp.version.minor}.${ezp.version.release}\3'/>
-            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+            <fileset dir="${build.dir}">
+                <patternset id="package.xml"/>
+            </fileset>
         </replaceregexp>
 
         <!-- <named-version>xxx</named-version> -->
         <replaceregexp byline="true" flags="m">
             <regexp pattern='^(    \074named-version\076)(.*)(\074/named-version\076)$'/>
             <substitution expression='\1${ezp.version.major}.${ezp.version.minor}\3'/>
-            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+            <fileset dir="${build.dir}">
+                <patternset id="package.xml"/>
+            </fileset>
         </replaceregexp>
 
         <!-- <package version="zzzz" -->
         <replaceregexp byline="true">
             <regexp pattern='^(\074package version=")(.*)(")$'/>
             <substitution expression='\1${version.major}.${version.minor}-${version.release}\3'/>
-            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+            <fileset dir="${build.dir}">
+                <patternset id="package.xml"/>
+            </fileset>
         </replaceregexp>
 
         <!-- <number>xxxx</number> -->
         <replaceregexp byline="true">
             <regexp pattern='^(    \074number\076)(.*)(\074/number\076)$'/>
             <substitution expression='\1${version.alias}\3'/>
-            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+            <fileset dir="${build.dir}">
+                <patternset id="package.xml"/>
+            </fileset>
         </replaceregexp>
 
         <!-- <release>yyy</release> -->
         <replaceregexp byline="true">
             <regexp pattern='^(    \074release\076)(.*)(\074/release\076)$'/>
             <substitution expression='\1${version.release}\3'/>
-            <fileset dir="${build.dir}" includes="**/*package.xml"/>
+            <fileset dir="${build.dir}">
+                <patternset id="package.xml"/>
+            </fileset>
         </replaceregexp>
     </target>
 
