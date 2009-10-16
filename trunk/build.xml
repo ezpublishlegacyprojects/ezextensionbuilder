@@ -416,7 +416,7 @@
     <!-- Generates an XML definition for eZ Publish extension package types       -->
     <!-- Only useful if you want to build your extension as an eZ Publish package -->
     <target name="generate-ezpackage-xml-definition" description="Generates an XML definition for eZ Publish extension package types">
-        <available file="packages/${extension.name}_extension/ezextension/${extension.name}"
+        <available file="${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
                    filepath="${build.dir}"
                    property="ezpackage.xml.exists"/>
 
@@ -426,17 +426,17 @@
                 <echo message="Building XML file list for extension ${extension.name}"/>
 
                 <get src="http://svn.projects.ez.no/ezextensionbuilder/trunk/ezpxmlextfilelist.php"
-                    file="ezpxmlextfilelist.php"
-                    usetimestamp="true"/>
+                     dest="ezpxmlextfilelist.php"
+                     usetimestamp="true"/>
 
-                <apply executable="${php.cli.executable.path}" failonerror="true">
-                    <arg value="ezpxmlextfilelist.php"/>
+                <exec executable="php" failonerror="true">
+                    <arg value="./ezpxmlextfilelist.php"/>
                     <arg value="-e"/>
-                    <arg value="${build.dir}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
+                    <arg value="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
                     <arg value="-n"/>
                     <arg value="${extension.name}"/>
-                    <redirector output="${build.dir}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
-                </apply>
+                    <redirector output="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
+                </exec>
             </then>
             <else>
                 <echo message="No packages found no need to generate anything"/>
