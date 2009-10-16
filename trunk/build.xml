@@ -380,8 +380,8 @@
                    property="gnu.license.extension.exists"/>
 
         <available file="LICENSE"
-                filepath="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
-                property="gnu.license.package.exists"/>
+                   filepath="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
+                   property="gnu.license.package.exists"/>
 
         <if>
             <and>
