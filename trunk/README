@@ -81,3 +81,33 @@ run
     ant -p
 
 to get a list of all available targets
+
+
+Example of properties file, ezwebin.properties
+----------------------------------------------
+
+::
+
+    ezwebin.version.major     = 1
+    ezwebin.version.minor     = 5
+    ezwebin.version.release   = 0
+
+    ezp.version.major   = 4
+    ezp.version.minor   = 2
+    ezp.version.release = 0
+
+    ezwebin.svn.url = http://svn.ez.no/svn/extensions/ezwebin/trunk
+
+    ezwebin.package.ezwebin_banners          = ezwebin_banners
+    ezwebin.package.ezwebin_classes          = ezwebin_classes
+    ezwebin.package.ezwebin_democontent      = ezwebin_democontent
+    ezwebin.package.ezwebin_design_blue      = ezwebin_design_blue
+    ezwebin.package.ezwebin_design_gray      = ezwebin_design_gray
+    ezwebin.package.ezwebin_design_cleangray = ezwebin_design_cleangray
+    ezwebin.package.ezwebin_extension        = ezwebin_extension
+    ezwebin.package.ezwebin_classes          = ezwebin_classes
+
+    ezwebin.external.dependency.ezjscore.repository       = http://svn.projects.ez.no/ezjscore/trunk
+    ezwebin.external.dependency.ezwt.repository           = http://svn.projects.ez.no/ezwebsitetoolbar/trunk
+    ezwebin.external.dependency.ezgmaplocation.repository = http://svn.projects.ez.no/ezgmaplocation/trunk
+    ezwebin.external.dependency.ezstarrating.repository   = http://svn.projects.ez.no/ezstarrating/trunk
