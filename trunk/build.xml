@@ -546,6 +546,7 @@
             usetimestamp="true"/>
 
         <var name="extension.name" unset="true"/>
+        <var name="svn.url"        unset="true"/>
 
         <ant antfile="build.xml"
             dir="."
