@@ -437,6 +437,8 @@
                     <arg value="${extension.name}"/>
                     <redirector output="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/extension-${extension.name}.xml" append="false"/>
                 </exec>
+
+                <delete file="ezpxmlextfilelist.php"/>
             </then>
             <else>
                 <echo message="No packages found no need to generate anything"/>
