@@ -545,8 +545,12 @@
             dest="ant/${dependant.extension.name}.properties"
             usetimestamp="true"/>
 
-        <var name="extension.name" unset="true"/>
-        <var name="svn.url"        unset="true"/>
+        <var name="extension.name"  unset="true"/>
+        <var name="svn.url"         unset="true"/>
+        <var name="version.major"   unset="true"/>
+        <var name="version.minor"   unset="true"/>
+        <var name="version.release" unset="true"/>
+        <var name="version.alias"   unset="true"/>
 
         <ant antfile="build.xml"
             dir="."
