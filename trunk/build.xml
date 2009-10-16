@@ -87,8 +87,11 @@
     <target name="init" description="Prepares the extension to be built">
         <mkdir dir="${build.dir}"/>
 
+        <echo message="Fetching code from SVN repository"/>
+
         <!-- svn export repository -->
         <exec executable="svn" failonerror="true">
+            <arg value="-q"/>
             <arg value="export"/>
             <arg value="${svn.url}"/>
             <arg value="${build.dir}/${extension.name}"/>
