@@ -18,6 +18,7 @@
 
     <target name="bootstrap" depends="ivy-resolve-dependencies" description="Download the real build.xml and launches it">
         <get src="${build.xml.url}" dest="build.xml"/>
+        <delete file="ivy.xml"/>
     </target>
 
     <!-- Downloads Ivy from web site so that it            -->
