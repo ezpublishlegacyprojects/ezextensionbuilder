@@ -56,6 +56,7 @@
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
+    <propertycopy name="create.tarball"  from="${extension.name}.create.tarball"/>
 
     <property name="version.alias" value="${version.major}.${version.minor}"/>
 
@@ -129,11 +130,19 @@
 
     <!-- Creates a tarball of the latest build -->
     <target name="dist" description="Creates a tarball of the built extension">
-        <mkdir dir="dist"/>
-        <tar destfile="dist/${extension.name}-${version.alias}.${version.release}.tar.gz"
-             compression="gzip"
-             longfile="gnu"
-             basedir="${build.dir}"/>
+        <if>
+            <equals arg1="${create.tarball}" arg2="yes"/>
+        <then>
+            <mkdir dir="dist"/>
+            <tar destfile="dist/${extension.name}-${version.alias}.${version.release}.tar.gz"
+                compression="gzip"
+                longfile="gnu"
+                basedir="${build.dir}"/>
+        </then>
+        <else>
+            <echo message="Tarball creating disabled, skipping"/>
+        </else>
+        </if>
     </target>
 
     <!-- Build the extension and generate the tarball -->
