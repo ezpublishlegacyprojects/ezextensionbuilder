@@ -114,6 +114,27 @@ Example of properties file, ezwebin.properties
     ezwebin.external.dependency.ezgmaplocation.repository = http://svn.projects.ez.no/ezgmaplocation/trunk
     ezwebin.external.dependency.ezstarrating.repository   = http://svn.projects.ez.no/ezstarrating/trunk
 
+Purging files from the final build
+----------------------------------
+
+You can create a file in which you can define a list of files or directories
+to purge in the final build directory. You can create the following file
+
+::
+
+    ant/files.to.exclude.txt
+
+With the following content, for example :
+
+::
+
+    myfile.php
+    dir1/
+    dir2/
+
+And myfile.php dir1 and dir2 will automatically be purged during
+the build process
+
 FAQ
 ---
 
