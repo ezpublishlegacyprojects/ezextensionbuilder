@@ -97,6 +97,32 @@
             <arg value="${svn.url}"/>
             <arg value="${build.dir}/${extension.name}"/>
         </exec>
+
+        <available file="ant/files.to.exclude.txt" property="files.to.exclude.exists"/>
+
+        <if>
+            <equals arg1="${files.to.exclude.exists}" arg2="true"/>
+
+            <then>
+                <!-- removes all files specified in the "files.to.exclude" -->
+                <loadfile srcFile="ant/files.to.exclude.txt" property="files.to.exclude"/>
+
+                <!-- in order to get directory removed they must be appended with a '/' -->
+                <!-- for example -->
+                <!-- ezinfo.php  -->
+                <!-- tests/      -->
+                <foreach list="${files.to.exclude}" delimiter="${line.separator}" target="-purge-file" param="file.to.purge"/>
+            </then>
+        </if>
+    </target>
+
+    <!-- private target               -->
+    <!-- Purges a file or a directory -->
+    <target name="-purge-file">
+        <echo message="${build.dir}/${extension.name}/${file.to.purge}"/>
+        <delete includeemptydirs="true" verbose="true">
+            <fileset dir="${build.dir}/${extension.name}" includes="${file.to.purge}"/>
+        </delete>
     </target>
 
     <!-- Builds the extension -->
