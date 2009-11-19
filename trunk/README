@@ -98,6 +98,8 @@ Example of properties file, ezwebin.properties
 
     ezwebin.svn.url = http://svn.ez.no/svn/extensions/ezwebin/trunk
 
+    ezwebin.create.tarballs=yes
+
     ezwebin.package.ezwebin_banners           = ezwebin_banners
     ezwebin.package.ezwebin_classes           = ezwebin_classes
     ezwebin.package.ezwebin_democontent       = ezwebin_democontent
