@@ -351,56 +351,86 @@
                 <available file="schema.sql"
                         filepath="${build.dir}/${extension.name}/sql/mysql"
                         property="mysql.schema.exists"/>
-                <fail unless="mysql.schema.exists" message="sql/mysql/schema.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/mysql/schema.sql"/>
+                </antcall>
 
                 <!-- mysql/cleandata.sql -->
                 <available file="cleandata.sql"
                         filepath="${build.dir}/${extension.name}/sql/mysql"
                         property="mysql.cleandata.exists"/>
-                <fail unless="mysql.cleandata.exists" message="sql/mysql/cleandata.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/mysql/cleandata.sql"/>
+                </antcall>
 
                 <!-- postgresql/schema.sql -->
                 <available file="schema.sql"
                         filepath="${build.dir}/${extension.name}/sql/postgresql"
                         property="postgresql.schema.exists"/>
-                <fail unless="postgresql.schema.exists" message="sql/postgresql/schema.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/postgresql/schema.sql"/>
+                </antcall>
 
                 <!-- postgresql/cleandata.sql -->
                 <available file="cleandata.sql"
                         filepath="${build.dir}/${extension.name}/sql/postgresql"
                         property="postgresql.cleandata.exists"/>
-                <fail unless="postgresql.cleandata.exists" message="sql/postgresql/cleandata.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/postgresql/cleandata.sql"/>
+                </antcall>
 
                 <!-- oracle/schema.sql -->
                 <available file="schema.sql"
                         filepath="${build.dir}/${extension.name}/sql/oracle"
                         property="oracle.schema.exists"/>
-                <fail unless="oracle.schema.exists" message="sql/oracle/schema.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/oracle/schema.sql"/>
+                </antcall>
 
                 <!-- oracle/cleandata.sql -->
                 <available file="cleandata.sql"
                         filepath="${build.dir}/${extension.name}/sql/oracle"
                         property="oracle.cleandata.exists"/>
-                <fail unless="oracle.cleandata.exists" message="sql/oracle/cleandata.sql file doesn't exist !"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/sql/oracle/cleandata.sql"/>
+                </antcall>
 
                 <!-- Last but not least, .dba files -->
                 <!-- share/db_schema.dba -->
                 <available file="db_schema.dba"
                         filepath="${build.dir}/${extension.name}/share/"
                         property="db.schema.dba.exists"/>
-                <fail unless="db.schema.dba.exists" message="db_schema.dba file doesn't exist!"/>
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/share/db_schema.dba"/>
+                </antcall>
 
                 <!-- share/db_schema.dba -->
                 <available file="db_data.dba"
                         filepath="${build.dir}/${extension.name}/share/"
                         property="db.data.dba.exists"/>
-                <fail unless="db.data.dba.exists" message="db_data.dba file doesn't exist!"/>
-
+                <antcall target="-fail-if-file-empty">
+                    <param name="file.name" value="${build.dir}/${extension.name}/share/db_data.dba"/>
+                </antcall>
             </then>
             <else>
                 <echo message="This extension does not do anything on the database, skipping"/>
             </else>
         </if>
+    </target>
+
+    <target name="-fail-if-file-empty" description="checks if a file exists but fails if it is empty">
+        <available file="${file.name}" property="file.exists"/>
+
+        <if>
+            <and>
+                <istrue value="${file.exists}"/>
+                <length file="${file.name}" when="equal" length="0" />
+            </and>
+            <then>
+                <fail message="${file.name} must not be empty, please remove it or add contents into it"/>
+            </then>
+        </if>
+        <var name="file.exists" unset="true"/>
     </target>
 
     <!-- Runs the eZ Network certification utility -->
