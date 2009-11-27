@@ -673,9 +673,16 @@
 
         <!-- Switched to the system tar command                             -->
         <!-- Ref : https://issues.apache.org/bugzilla/show_bug.cgi?id=47653 -->
-        <exec executable="./createzpkg.sh">
-            <arg value="${build.dir}/${extension.name}/packages/${ezpackage.name}"/>
-            <arg value="${build.dir}/${ezpackage.name}"/>
+        <copy file="createzpkg.sh" tofile="${build.dir}/${extension.name}/packages/${ezpackage.name}/createzpkg.sh"/>
+
+        <exec executable ="sh"
+              dir ="${build.dir}/${extension.name}/packages/${ezpackage.name}"
+              failonerror="true">
+            <arg value="./createzpkg.sh"/>
+            <arg value="."/>
+            <arg value="../../../../${build.dir}/${ezpackage.name}"/>
         </exec>
+
+        <delete file="${build.dir}/${extension.name}/packages/createzpkg.sh"/>
     </target>
 </project>
