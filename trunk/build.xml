@@ -679,10 +679,10 @@
               dir ="${build.dir}/${extension.name}/packages/${ezpackage.name}"
               failonerror="true">
             <arg value="./createzpkg.sh"/>
-            <arg value="."/>
+            <arg value="*"/>
             <arg value="../../../../${build.dir}/${ezpackage.name}"/>
         </exec>
 
-        <delete file="${build.dir}/${extension.name}/packages/createzpkg.sh"/>
+        <delete file="${build.dir}/${extension.name}/packages/${ezpackage.name}/createzpkg.sh"/>
     </target>
 </project>
