@@ -183,7 +183,11 @@
         <delete dir="dist"/>
     </target>
 
-    <!-- Updates ezinfo.php -->
+    <!-- Updates ezinfo.php                                                           -->
+    <!-- Uses a regular expression to search and replace the correct string           -->
+    <!-- Within the file, please note there is a limit of 25 sets to indent 3rd party -->
+    <!-- lib version numbers, if you use more than 25 spaces the version number will  -->
+    <!-- not be updated correctly                                                     -->
     <target name="update-ezinfo" description="Updates ezinfo.php with correct version numbers">
         <echo message="Updating ezinfo.php"/>
 
@@ -440,6 +444,7 @@
     </target>
 
     <!-- Checks for the presence of LICENSE and README files -->
+    <!-- These files must be located below the root directory of the extension -->
     <target name="check-gnu-files" description="Checks for LICENSE and README files">
         <echo message="Checking for LICENSE and README files"/>
 
