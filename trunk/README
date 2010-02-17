@@ -34,7 +34,7 @@ For example, for the ezoe extension, you should get this :
       `-- ant
         `-- ezoe.properties
 
-And the ezoe.properties
+And the ezoe.properties file
 
 ::
 
