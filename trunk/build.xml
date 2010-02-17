@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
+<!--                                                             -->
+<!-- eZ Extension Builder                                        -->
+<!-- an Ant build file for eZ Publish extensions                 -->
+<!--                                                             -->
+<!-- @author J. Renard                                           -->
+<!-- @copyright Copyright (C) 2010 eZ Systems AS                 -->
+<!-- @license code licensed under the GPL License: see README    -->
+<!--                                                             -->
 <project name="eZExtensionBuilder" default="help">
 
     <description>eZExtensionBuilder build file</description>
@@ -16,7 +24,7 @@
 
     <property name="build.dir" value="build"/>
 
-    <!-- an extension propertie file must be stored in               -->
+    <!-- an extension properties file must be stored in              -->
     <!-- an 'ant' folder under the root of the extension             -->
     <!-- For example for extension ezoe this gives :                 -->
     <!-- ezoe                                                        -->
@@ -29,7 +37,7 @@
     <!-- <extensionname>.version.major     = xxx                     -->
     <!-- <extensionname>.version.minor     = yyy                     -->
     <!-- <extensionname>.version.release   = zzzz                    -->
-    <!-- <extensionname>.svn.url           = http://url.com/to/svn/ -->
+    <!-- <extensionname>.svn.url           = http://url.com/to/svn/  -->
     <!--                                                             -->
     <property file="./ant/${extension.name}.properties"/>
 
