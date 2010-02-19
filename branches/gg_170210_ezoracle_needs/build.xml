@@ -64,7 +64,7 @@
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
-	<!-- this property is not mandatory - it defaults to 'no' -->
+    <!-- this property is not mandatory - it defaults to 'no' -->
     <propertycopy name="create.tarball"  from="${extension.name}.create.tarball" silent="true"/>
 
     <property name="version.alias" value="${version.major}.${version.minor}"/>
@@ -301,20 +301,21 @@
             <then>
                 <property name="fileset.dir"       value="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
                 <property name="filelist.md5.path" value="${fileset.dir}" />
+                <!-- @todo replace \ with \\ for windows -->
                 <property name="trim.regex"        value="${user.dir}/${filelist.md5.path}/"/>
             </then>
             <else>
                 <property name="fileset.dir"       value="${build.dir}/${extension.name}"/>
                 <property name="filelist.md5.path" value="${fileset.dir}"/>
+                <!-- @todo replace \ with \\ for windows -->
                 <property name="trim.regex"        value="${user.dir}/${fileset.dir}/"/>
             </else>
         </if>
 
-        <echo  message="${filelist.md5.path}/share/filelist.md5" />
-
         <mkdir dir="${filelist.md5.path}/share"/>
 
         <!-- Creates the checksum list -->
+        <delete file="${filelist.md5.path}/share/filelist.md5" quiet="true"/>
         <apply executable="md5sum" failonerror="true" dir="${build.dir}/${extension.name}">
             <fileset dir="${fileset.dir}">
                 <patternset id="all.sources"/>
@@ -322,6 +323,8 @@
             <srcfile/>
             <redirector output="${filelist.md5.path}/share/filelist.md5" append="true"/>
         </apply>
+
+        <echo message="${filelist.md5.path}/share/filelist.md5" />
 
         <!-- removes the absolute part of the path -->
         <!-- and only let the relative one         -->
@@ -477,7 +480,7 @@
                 <isfalse value="${gnu.license.extension.exists}"/>
             </and>
             <then>
-                <fail message="LICENSE file doesn't exist!"/>
+                <fail message="LICENSE file doesn't exist in folder ${build.dir}/${extension.name}!"/>
             </then>
         </if>
 
@@ -487,7 +490,7 @@
                 <isfalse value="${gnu.license.package.exists}" />
             </and>
             <then>
-                <fail message="LICENSE file doesn't exist in package folder!" />
+                <fail message="LICENSE file doesn't exist in package folder ${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}!" />
             </then>
         </if>
 
@@ -506,7 +509,7 @@
                 <isfalse value="${gnu.readme.extension.exists}" />
             </and>
             <then>
-                <fail message="README file doesn't exist!" />
+                <fail message="README file doesn't exist in folder ${build.dir}/${extension.name}!" />
             </then>
         </if>
         
@@ -516,7 +519,7 @@
                 <isfalse value="${gnu.readme.package.exists}" />
             </and>
             <then>
-                <fail message="README file doesn't exist in package folder!"/>
+                <fail message="README file doesn't exist in package folder ${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}!"/>
             </then>
         </if>
     </target>
