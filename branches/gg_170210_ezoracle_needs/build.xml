@@ -64,7 +64,8 @@
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
-    <propertycopy name="create.tarball"  from="${extension.name}.create.tarball"/>
+	<!-- this property is not mandatory - it defaults to 'no' -->
+    <propertycopy name="create.tarball"  from="${extension.name}.create.tarball" silent="true"/>
 
     <property name="version.alias" value="${version.major}.${version.minor}"/>
 
