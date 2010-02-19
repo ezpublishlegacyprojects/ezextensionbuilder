@@ -18,6 +18,7 @@ or questions please contact info@ez.no
    
 - Apache Ant version ? or later. Get it from http://ant.apache.org/
 - the php cli and eZ Components (only for generating an ezpackage)
+- command line tools: svn, md5sum, rst2html.py
 
 4. Installing
 -------------
