@@ -78,7 +78,7 @@ run
 
 ::
 
-    ant -p
+    ant -p -Dextension.name=yourextension
 
 to get a list of all available targets
 
