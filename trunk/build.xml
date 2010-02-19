@@ -471,7 +471,10 @@
                    property="gnu.license.package.exists"/>
 
         <if>
-            <isfalse value="${gnu.license.extension.exists}"/>
+            <and>
+                <isfalse value="${package.dir.exists}" />
+                <isfalse value="${gnu.license.extension.exists}"/>
+            </and>
             <then>
                 <fail message="LICENSE file doesn't exist!"/>
             </then>
@@ -497,7 +500,10 @@
                    property="gnu.readme.package.exists"/>
 
         <if>
-            <isfalse value="${gnu.readme.extension.exists}" />
+            <and>
+                <ifalse value="${package.dir.exists}" />
+                <isfalse value="${gnu.readme.extension.exists}" />
+            </and>
             <then>
                 <fail message="README file doesn't exist!" />
             </then>
