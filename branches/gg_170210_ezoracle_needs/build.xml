@@ -301,14 +301,14 @@
             <then>
                 <property name="fileset.dir"       value="${build.dir}/${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"/>
                 <property name="filelist.md5.path" value="${fileset.dir}" />
-                <!-- @todo replace \ with \\ for windows -->
-                <property name="trim.regex"        value="${user.dir}/${filelist.md5.path}/"/>
+                <!-- replace \ with \\ for windows paths, to be used as regexp match pattern -->
+                <propertyregex property="trim.regex" input="${user.dir}/${filelist.md5.path}/" regexp="\\([^\\])" replace="/" global="true"/>
             </then>
             <else>
                 <property name="fileset.dir"       value="${build.dir}/${extension.name}"/>
                 <property name="filelist.md5.path" value="${fileset.dir}"/>
-                <!-- @todo replace \ with \\ for windows -->
-                <property name="trim.regex"        value="${user.dir}/${fileset.dir}/"/>
+                <!-- replace \ with \\ for windows paths, to be used as regexp match pattern -->
+                <propertyregex property="trim.regex" input="${user.dir}/${fileset.dir}/" regexp="\\" replace="/" global="true"/>
             </else>
         </if>
 
@@ -328,6 +328,12 @@
 
         <!-- removes the absolute part of the path -->
         <!-- and only let the relative one         -->
+        <!-- be kind to md5sum on windows          -->
+        <replaceregexp byline="true" flags="g">
+            <regexp pattern="\\"/>
+            <substitution expression="/"/>
+            <fileset file="${filelist.md5.path}/share/filelist.md5"/>
+        </replaceregexp>
         <replaceregexp byline="true">
             <regexp pattern="${trim.regex}"/>
             <substitution expression=""/>
