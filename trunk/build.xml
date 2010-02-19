@@ -456,6 +456,11 @@
     <target name="check-gnu-files" description="Checks for LICENSE and README files">
         <echo message="Checking for LICENSE and README files"/>
 
+        <!-- Figure out if we need to check in packages -->
+        <available file="${extension.name}/packages/${extension.name}_extension/ezextension/${extension.name}"
+                   filepath="${build.dir}"
+                   property="package.dir.exists" />
+
         <!-- LICENSE -->
         <available file="LICENSE"
                    filepath="${build.dir}/${extension.name}"
@@ -466,12 +471,19 @@
                    property="gnu.license.package.exists"/>
 
         <if>
-            <and>
-                <isfalse value="${gnu.license.extension.exists}"/>
-                <isfalse value="${gnu.license.package.exists}"/>
-            </and>
+            <isfalse value="${gnu.license.extension.exists}"/>
             <then>
                 <fail message="LICENSE file doesn't exist!"/>
+            </then>
+        </if>
+
+        <if>
+            <and>
+                <istrue value="${package.dir.exists}" />
+                <isfalse value="${gnu.license.package.exists}" />
+            </and>
+            <then>
+                <fail message="LICENSE file doesn't exist in package folder!" />
             </then>
         </if>
 
@@ -485,12 +497,19 @@
                    property="gnu.readme.package.exists"/>
 
         <if>
+            <isfalse value="${gnu.readme.extension.exists}" />
+            <then>
+                <fail message="README file doesn't exist!" />
+            </then>
+        </if>
+        
+        <if>
             <and>
-                <isfalse value="${gnu.readme.extension.exists}"/>
-                <isfalse value="${gnu.readme.package.exists}"/>
+                <istrue value="${package.dir.exists}" />
+                <isfalse value="${gnu.readme.package.exists}" />
             </and>
             <then>
-                <fail message="README file doesn't exist!"/>
+                <fail message="README file doesn't exist in package folder!"/>
             </then>
         </if>
     </target>
