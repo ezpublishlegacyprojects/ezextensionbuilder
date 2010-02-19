@@ -147,3 +147,11 @@ This is because you forgot to define and extension name, the correct command to 
 ::
 
     ant <target name> -Dextension.name=<yourextension>
+
+"Destination directory exists; please remove the directory or use --force to overwrite" roor message
+
+This is because the build directory is not empty from a previous build run. Run:
+
+::
+
+    ant clean -Dextension.name=<yourextension>
