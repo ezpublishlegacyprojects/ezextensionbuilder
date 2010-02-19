@@ -501,7 +501,7 @@
 
         <if>
             <and>
-                <ifalse value="${package.dir.exists}" />
+                <isfalse value="${package.dir.exists}" />
                 <isfalse value="${gnu.readme.extension.exists}" />
             </and>
             <then>
