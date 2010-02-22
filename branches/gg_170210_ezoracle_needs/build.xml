@@ -4,6 +4,8 @@
 <!-- an Ant build file for eZ Publish extensions                 -->
 <!--                                                             -->
 <!-- @author J. Renard                                           -->
+<!-- @author O. M. Smestad                                       -->
+<!-- @author G. Giunta                                           -->
 <!-- @copyright Copyright (C) 2010 eZ Systems AS                 -->
 <!-- @license code licensed under the GPL License: see README    -->
 <!--                                                             -->
@@ -64,10 +66,15 @@
     <propertycopy name="version.minor"   from="${extension.name}.version.minor"/>
     <propertycopy name="version.release" from="${extension.name}.version.release"/>
     <propertycopy name="svn.url"         from="${extension.name}.svn.url" />
-    <!-- this property is not mandatory - it defaults to 'no' -->
+    <!-- the following properties are not mandatory -->
     <propertycopy name="create.tarball"  from="${extension.name}.create.tarball" silent="true"/>
-
-    <property name="version.alias" value="${version.major}.${version.minor}"/>
+    <property     name="create.tarball"  value="no"/>
+    <propertycopy name="version.license" from="${extension.name}.version.license" silent="true"/>
+    <property     name="version.license" value="GNU General Public License v2.0"/>
+    <propertycopy name="version.alias"   from="${extension.name}.version.alias" silent="true"/>
+    <property     name="version.alias"   value="${version.major}.${version.minor}"/>
+    <!-- the following properties are normally not overridden -->
+    <property     name="releasenr.separator" value="-"/>
 
     <!-- =================== -->
     <!-- /Build properties   -->
@@ -142,6 +149,7 @@
 
         <antcall target="update-ezinfo"/>
         <antcall target="update-license-headers"/>
+        <antcall target="update-extra-files"/>
         <antcall target="generate-documentation"/>
         <antcall target="generate-md5sums"/>
         <antcall target="check-sql-files"/>
@@ -205,7 +213,7 @@
             <!-- The limit of spaces is set to 25 otherwise 3rd party version strings -->
             <!-- will be replaced as well and we do not want that                     -->
             <regexp pattern="^([\s]{1,25}\047Version\047[\s]+=>[\s]+\047)(.*)(\047,)$"/>
-            <substitution expression='\1${version.alias}-${version.release}\3'/>
+            <substitution expression='\1${version.alias}${releasenr.separator}${version.release}\3'/>
             <fileset dir="${build.dir}" includes="**/*ezinfo.php"/>
         </replaceregexp>
     </target>
@@ -218,7 +226,7 @@
         <!-- SOFTWARE RELEASE -->
         <replaceregexp byline="true">
             <regexp pattern="// SOFTWARE RELEASE: (.*)"/>
-            <substitution expression="// SOFTWARE RELEASE: ${version.alias}-${version.release}"/>
+            <substitution expression="// SOFTWARE RELEASE: ${version.alias}${releasenr.separator}${version.release}"/>
             <fileset dir="${build.dir}">
                 <patternset refid="all.sources"/>
             </fileset>
@@ -232,6 +240,27 @@
                 <patternset refid="all.sources"/>
             </fileset>
         </replaceregexp>
+    </target>
+
+    <target name="update-extra-files" description="Updates extra files with correct version numbers and licensing info">
+        <echo message="Updating extra headers"/>
+
+        <!-- @todo add complete list from dist.sh ? -->
+        <replace token="[EXTENSION_VERSION]" value="${version.alias}${releasenr.separator}${version.release}">
+            <fileset dir="${build.dir}/${extension.name}">
+                <patternset includesfile="ant/files.to.parse.txt"/>
+            </fileset>
+        </replace>
+        <replace token="[EXTENSION_PUBLISH_VERSION]" value="${ezp.version.major}.${ezp.version.minor}.${ezp.version.release}">
+            <fileset dir="${build.dir}/${extension.name}">
+                <patternset includesfile="ant/files.to.parse.txt"/>
+            </fileset>
+        </replace>
+        <replace token="[EXTENSION_LICENSE]" value="${version.license}" includesfile="ant/files.to.parse.txt">
+            <fileset dir="${build.dir}/${extension.name}">
+                <patternset includesfile="ant/files.to.parse.txt"/>
+            </fileset>
+        </replace>
     </target>
 
     <!-- Generates the documentation out of .rst files -->
@@ -518,7 +547,7 @@
                 <fail message="README file doesn't exist in folder ${build.dir}/${extension.name}!" />
             </then>
         </if>
-        
+
         <if>
             <and>
                 <istrue value="${package.dir.exists}" />
@@ -589,7 +618,7 @@
         <!-- <package version="zzzz" -->
         <replaceregexp byline="true">
             <regexp pattern='^(\074package version=")(.*)(")$'/>
-            <substitution expression='\1${version.major}.${version.minor}-${version.release}\3'/>
+            <substitution expression='\1${version.major}.${version.minor}${releasenr.separator}${version.release}\3'/>
             <fileset dir="${build.dir}">
                 <patternset id="package.xml"/>
             </fileset>
