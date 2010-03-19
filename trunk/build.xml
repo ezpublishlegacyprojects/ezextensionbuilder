@@ -170,8 +170,13 @@
             <mkdir dir="dist"/>
             <tar destfile="dist/${extension.name}-${version.alias}.${version.release}.tar.gz"
                 compression="gzip"
-                longfile="gnu"
-                basedir="${build.dir}"/>
+                longfile="gnu">
+                <tarfileset dir="${build.dir}/${extension.name}"
+                    prefix="${extension.name}"
+                            preserveLeadingSlashes="true">
+                        <include name="**/*"/>
+                </tarfileset>
+            </tar>
         </then>
         <else>
             <echo message="Tarball creating disabled, skipping"/>
