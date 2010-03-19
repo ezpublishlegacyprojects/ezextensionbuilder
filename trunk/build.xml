@@ -184,6 +184,19 @@
         </if>
     </target>
 
+    <!-- Creates a big fat tarball containing all extensions in the build/ directory -->
+    <target name="fat-dist">
+        <mkdir dir="dist"/>
+        <tar destfile="dist/${extension.name}-${version.alias}.${version.release}-bundle.tar.gz"
+            compression="gzip"
+            longfile="gnu">
+            <tarfileset dir="${build.dir}"
+                        preserveLeadingSlashes="true">
+                    <include name="**/*"/>
+            </tarfileset>
+        </tar>
+    </target>
+
     <!-- Build the extension and generate the tarball -->
     <target name="all" description="Build the extension and generate the tarball">
         <antcall target="build"/>
