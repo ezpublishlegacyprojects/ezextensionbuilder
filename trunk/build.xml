@@ -241,10 +241,11 @@
             </fileset>
         </replaceregexp>
 
-        <!-- COPYRIGHT NOTICE -->
+        <!-- // COPYRIGHT NOTICE: Copyright \(C\) 1999-[\d]{4} eZ Systems AS -->
+        <!-- @copyright Copyright (C) 1999-2009 eZ Systems AS. All rights reserved. -->
         <replaceregexp byline="true">
-            <regexp pattern="// COPYRIGHT NOTICE: Copyright \(C\) 1999-[\d]{4} eZ Systems AS"/>
-            <substitution expression="// COPYRIGHT NOTICE: Copyright (C) 1999-${date.current.year} eZ Systems AS"/>
+            <regexp pattern="Copyright \(C\) 1999-[\d]{4} eZ Systems AS"/>
+            <substitution expression="Copyright (C) 1999-${date.current.year} eZ Systems AS"/>
             <fileset dir="${build.dir}">
                 <patternset refid="all.sources"/>
             </fileset>
