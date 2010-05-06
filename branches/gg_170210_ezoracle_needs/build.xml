@@ -179,13 +179,31 @@
             <mkdir dir="dist"/>
             <tar destfile="dist/${extension.name}-${version.alias}.${version.release}.tar.gz"
                 compression="gzip"
-                longfile="gnu"
-                basedir="${build.dir}"/>
+                longfile="gnu">
+                <tarfileset dir="${build.dir}/${extension.name}"
+                    prefix="${extension.name}"
+                            preserveLeadingSlashes="true">
+                        <include name="**/*"/>
+                </tarfileset>
+            </tar>
         </then>
         <else>
             <echo message="Tarball creating disabled, skipping"/>
         </else>
         </if>
+    </target>
+
+    <!-- Creates a big fat tarball containing all extensions in the build/ directory -->
+    <target name="fat-dist">
+        <mkdir dir="dist"/>
+        <tar destfile="dist/${extension.name}-${version.alias}.${version.release}-bundle.tar.gz"
+            compression="gzip"
+            longfile="gnu">
+            <tarfileset dir="${build.dir}"
+                        preserveLeadingSlashes="true">
+                    <include name="**/*"/>
+            </tarfileset>
+        </tar>
     </target>
 
     <!-- Build the extension and generate the tarball -->
@@ -232,10 +250,11 @@
             </fileset>
         </replaceregexp>
 
-        <!-- COPYRIGHT NOTICE -->
+        <!-- // COPYRIGHT NOTICE: Copyright \(C\) 1999-[\d]{4} eZ Systems AS -->
+        <!-- @copyright Copyright (C) 1999-2009 eZ Systems AS. All rights reserved. -->
         <replaceregexp byline="true">
-            <regexp pattern="// COPYRIGHT NOTICE: Copyright \(C\) 1999-[\d]{4} eZ Systems AS"/>
-            <substitution expression="// COPYRIGHT NOTICE: Copyright (C) 1999-${date.current.year} eZ Systems AS"/>
+            <regexp pattern="Copyright \(C\) 1999-[\d]{4} eZ Systems AS"/>
+            <substitution expression="Copyright (C) 1999-${date.current.year} eZ Systems AS"/>
             <fileset dir="${build.dir}">
                 <patternset refid="all.sources"/>
             </fileset>
